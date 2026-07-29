@@ -4,47 +4,65 @@
  */
 
 const ADMIN_CREDS = {
-  id: 'admin',
-  email: 'zantac.in',
-  password: 'jabarchand$123',
-  name: 'Zentra Admin',
-  role: 'admin',
+  id: "admin",
+  email: "zantac.in",
+  password: "jabarchand$123",
+  name: "Zentra Admin",
+  role: "admin",
 };
 
 const Auth = {
   /**
    * Login — checks admin first, then registered users
    */
-  login(email, password) {
+  async login(email, password) {
     if (!email || !password) {
-      return { success: false, error: 'Please enter your email and password.' };
+      return { success: false, error: "Please enter your email and password." };
     }
 
     const normalizedInput = email.trim().toLowerCase();
 
     // Admin login
-    if (normalizedInput === ADMIN_CREDS.email && password === ADMIN_CREDS.password) {
+    if (
+      normalizedInput === ADMIN_CREDS.email &&
+      password === ADMIN_CREDS.password
+    ) {
       const session = {
         id: ADMIN_CREDS.id,
         name: ADMIN_CREDS.name,
         email: ADMIN_CREDS.email,
-        role: 'admin',
+        role: "admin",
       };
       Storage.setSession(session);
       return { success: true, user: session };
     }
 
     // Regular user login — search by email or phone number
-    const users = Storage.getUsers();
-    const user = users.find(
-      (u) => (u.email && u.email.toLowerCase() === normalizedInput) || (u.phone && u.phone.replace(/\s/g, '') === normalizedInput)
+    let users = Storage.getUsers();
+    let user = users.find(
+      (u) =>
+        (u.email && u.email.toLowerCase() === normalizedInput) ||
+        (u.phone && u.phone.replace(/\s/g, "") === normalizedInput),
     );
 
     if (!user) {
-      return { success: false, error: 'No account found with this email or phone number. Please sign up first!' };
+      users = await Storage.getUsersAsync();
+      user = users.find(
+        (u) =>
+          (u.email && u.email.toLowerCase() === normalizedInput) ||
+          (u.phone && u.phone.replace(/\s/g, "") === normalizedInput),
+      );
+    }
+
+    if (!user) {
+      return {
+        success: false,
+        error:
+          "No account found with this email or phone number. Please sign up first!",
+      };
     }
     if (user.password !== password) {
-      return { success: false, error: 'Incorrect password. Please try again.' };
+      return { success: false, error: "Incorrect password. Please try again." };
     }
 
     const session = {
@@ -52,7 +70,7 @@ const Auth = {
       name: user.name,
       email: user.email,
       phone: user.phone,
-      role: 'user',
+      role: "user",
     };
     Storage.setSession(session);
     return { success: true, user: session };
@@ -61,43 +79,56 @@ const Auth = {
   /**
    * Register a new user account
    */
-  register(name, email, phone, password) {
+  async register(name, email, phone, password) {
     name = name?.trim();
     email = email?.trim().toLowerCase();
-    phone = phone?.trim().replace(/\s/g, '');
+    phone = phone?.trim().replace(/\s/g, "");
     password = password?.trim();
 
     if (!name || !email || !phone || !password) {
-      return { success: false, error: 'All fields are required.' };
+      return { success: false, error: "All fields are required." };
     }
 
     if (name.length < 2) {
-      return { success: false, error: 'Please enter your full name.' };
+      return { success: false, error: "Please enter your full name." };
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return { success: false, error: 'Please enter a valid email address.' };
+      return { success: false, error: "Please enter a valid email address." };
     }
 
     if (!/^[6-9]\d{9}$/.test(phone)) {
-      return { success: false, error: 'Please enter a valid 10-digit Indian mobile number.' };
+      return {
+        success: false,
+        error: "Please enter a valid 10-digit Indian mobile number.",
+      };
     }
 
     if (password.length < 6) {
-      return { success: false, error: 'Password must be at least 6 characters long.' };
+      return {
+        success: false,
+        error: "Password must be at least 6 characters long.",
+      };
     }
 
     if (email === ADMIN_CREDS.email) {
-      return { success: false, error: 'This email address is not available.' };
+      return { success: false, error: "This email address is not available." };
     }
 
+    await Storage.getUsersAsync();
     if (Storage.getUserByEmail(email)) {
-      return { success: false, error: 'An account with this email already exists. Please login.' };
+      return {
+        success: false,
+        error: "An account with this email already exists. Please login.",
+      };
     }
 
-    const user = Storage.addUser({ name, email, phone, password });
+    const user = await Storage.addUser({ name, email, phone, password });
     if (!user) {
-      return { success: false, error: 'Registration failed. Please try again.' };
+      return {
+        success: false,
+        error: "Registration failed. Please try again.",
+      };
     }
 
     return { success: true, user };
@@ -129,13 +160,13 @@ const Auth = {
    */
   isAdmin() {
     const s = Storage.getSession();
-    return s?.role === 'admin';
+    return s?.role === "admin";
   },
 
   /**
    * Redirect to auth page if not logged in
    */
-  requireAuth(redirectTo = 'auth.html') {
+  requireAuth(redirectTo = "auth.html") {
     if (!this.isLoggedIn()) {
       window.location.href = redirectTo;
       return false;
@@ -146,7 +177,7 @@ const Auth = {
   /**
    * Redirect to home if not admin
    */
-  requireAdmin(redirectTo = 'index.html') {
+  requireAdmin(redirectTo = "index.html") {
     if (!this.isAdmin()) {
       window.location.href = redirectTo;
       return false;
