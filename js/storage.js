@@ -13,8 +13,8 @@ const STORAGE_KEYS = {
 };
 
 const Storage = {
-   apiBaseUrl: 
-    (typeof window !== "undefined" && window.ZENTRA_CONFIG?.apiBaseUrl) || 
+  apiBaseUrl:
+    (typeof window !== "undefined" && window.ZENTRA_CONFIG?.apiBaseUrl) ||
     "https://zentra-clothing-store.vercel.app/api",
   backendEnabled: true,
 
@@ -25,7 +25,7 @@ const Storage = {
     } catch (e) {
       return false;
     }
-  },    
+  },
 
   async _loadProductsFromBackend() {
     try {
@@ -33,7 +33,8 @@ const Storage = {
       const res = await fetch(`${this.apiBaseUrl}/products`);
       if (!res.ok) return null;
       const data = await res.json();
-      return Array.isArray(data) ? data : [];
+      if (!Array.isArray(data)) return [];
+      return data.map((item) => this._normalizeProduct(item));
     } catch (e) {
       return null;
     }
@@ -51,6 +52,127 @@ const Storage = {
     } catch (e) {
       return false;
     }
+  },
+
+  async _loadUsersFromBackend() {
+    try {
+      if (!(await this.pingBackend())) return null;
+      const res = await fetch(`${this.apiBaseUrl}/users`);
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!Array.isArray(data)) return [];
+      return data.map((item) => this._normalizeUser(item));
+    } catch (e) {
+      return null;
+    }
+  },
+
+  async _loadRequestsFromBackend() {
+    try {
+      if (!(await this.pingBackend())) return null;
+      const res = await fetch(`${this.apiBaseUrl}/requests`);
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!Array.isArray(data)) return [];
+      return data.map((item) => this._normalizeRequest(item));
+    } catch (e) {
+      return null;
+    }
+  },
+
+  async _syncUserToBackend(user) {
+    try {
+      if (!(await this.pingBackend())) return false;
+      const res = await fetch(`${this.apiBaseUrl}/users`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+      return res.ok;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  async _syncRequestToBackend(request) {
+    try {
+      if (!(await this.pingBackend())) return false;
+      const res = await fetch(`${this.apiBaseUrl}/requests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(request),
+      });
+      return res.ok;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  async _syncRequestUpdateToBackend(request) {
+    try {
+      if (!(await this.pingBackend())) return false;
+      const res = await fetch(`${this.apiBaseUrl}/requests`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(request),
+      });
+      return res.ok;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  _normalizeProduct(raw) {
+    return {
+      ...raw,
+      id: raw.id,
+      name: raw.name,
+      category: raw.category,
+      description: raw.description,
+      price: raw.price,
+      originalPrice: raw.originalPrice ?? raw.original_price ?? 0,
+      stock: raw.stock,
+      trending: raw.trending,
+      newArrival: raw.newArrival ?? raw.new_arrival ?? false,
+      images: raw.images || [],
+      tags: raw.tags || [],
+      sizes: raw.sizes || [],
+      createdAt: raw.createdAt ?? raw.created_at ?? Date.now(),
+      updatedAt: raw.updatedAt ?? raw.updated_at ?? Date.now(),
+    };
+  },
+
+  _normalizeUser(raw) {
+    return {
+      ...raw,
+      id: raw.id,
+      name: raw.name,
+      email: raw.email,
+      phone: raw.phone,
+      password: raw.password,
+      createdAt: raw.createdAt ?? raw.created_at ?? Date.now(),
+      updatedAt: raw.updatedAt ?? raw.updated_at ?? Date.now(),
+    };
+  },
+
+  _normalizeRequest(raw) {
+    return {
+      ...raw,
+      id: raw.id,
+      userId: raw.userId ?? raw.user_id,
+      userName: raw.userName ?? raw.user_name,
+      userEmail: raw.userEmail ?? raw.user_email ?? "",
+      userPhone: raw.userPhone ?? raw.user_phone ?? "",
+      productName: raw.productName ?? raw.product_name,
+      description: raw.description,
+      size: raw.size,
+      quantity: raw.quantity,
+      address: raw.address,
+      status: raw.status,
+      adminNotes: raw.adminNotes ?? raw.admin_notes ?? "",
+      createdAt: raw.createdAt ?? raw.created_at ?? Date.now(),
+      updatedAt: raw.updatedAt ?? raw.updated_at ?? Date.now(),
+    };
   },
 
   // ── Generic ──────────────────────────────────────────────────────────────
@@ -227,16 +349,30 @@ const Storage = {
     return this.get(STORAGE_KEYS.USERS) || [];
   },
 
+  async getUsersAsync() {
+    const backendUsers = await this._loadUsersFromBackend();
+    if (backendUsers) {
+      this.saveUsers(backendUsers);
+      return backendUsers;
+    }
+    return this.getUsers();
+  },
+
   saveUsers(users) {
     return this.set(STORAGE_KEYS.USERS, users);
   },
 
-  addUser(data) {
+  async addUser(data) {
     const users = this.getUsers();
     if (users.find((u) => u.email === data.email)) return null;
     const user = { ...data, id: this.uuid(), createdAt: Date.now() };
     users.push(user);
     this.saveUsers(users);
+    try {
+      await this._syncUserToBackend(user);
+    } catch (e) {
+      console.warn("Storage.addUser backend sync failed:", e);
+    }
     return user;
   },
 
@@ -253,11 +389,20 @@ const Storage = {
     return this.get(STORAGE_KEYS.REQUESTS) || [];
   },
 
+  async getRequestsAsync() {
+    const backendRequests = await this._loadRequestsFromBackend();
+    if (backendRequests) {
+      this.saveRequests(backendRequests);
+      return backendRequests;
+    }
+    return this.getRequests();
+  },
+
   saveRequests(requests) {
     return this.set(STORAGE_KEYS.REQUESTS, requests);
   },
 
-  addRequest(data) {
+  async addRequest(data) {
     const requests = this.getRequests();
     const request = {
       ...data,
@@ -265,18 +410,29 @@ const Storage = {
       status: "pending",
       adminNotes: "",
       createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
     requests.unshift(request);
     this.saveRequests(requests);
+    try {
+      await this._syncRequestToBackend(request);
+    } catch (e) {
+      console.warn("Storage.addRequest backend sync failed:", e);
+    }
     return request;
   },
 
-  updateRequest(id, updates) {
+  async updateRequest(id, updates) {
     const requests = this.getRequests();
     const i = requests.findIndex((r) => r.id === id);
     if (i === -1) return null;
     requests[i] = { ...requests[i], ...updates, updatedAt: Date.now() };
     this.saveRequests(requests);
+    try {
+      await this._syncRequestUpdateToBackend(requests[i]);
+    } catch (e) {
+      console.warn("Storage.updateRequest backend sync failed:", e);
+    }
     return requests[i];
   },
 
