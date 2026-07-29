@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <title>Admin Panel — ZENTRA</title>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/animations.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <style>
+    .admin-header-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .admin-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .admin-badge {
+      background: var(--accent-glow);
+      border: 1px solid var(--border-accent);
+      color: var(--accent);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-full);
+    }
+  </style>
+</head>
+<body id="admin-panel">
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="logo.png" alt="ZENTRA" class="nav-logo-img" />
+    </a>
+    <div class="nav-links">
+      <a href="index.html"    class="nav-link">← Back to Site</a>
+    </div>
+    <div class="nav-actions" id="nav-actions"></div>
+    <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html" class="mobile-nav-link">← Back to Site</a>
+</div>
+
+<!-- Panel Layout -->
+<div class="panel-layout">
+
+  <!-- Sidebar -->
+  <aside class="panel-sidebar">
+    <div style="padding:1.25rem 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem">
+      <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.25rem">
+        <span style="font-size:1.1rem">🛡️</span>
+        <span class="admin-badge">Admin</span>
+      </div>
+      <div style="font-size:0.875rem;font-weight:600;color:var(--text)" id="admin-name">Admin</div>
+      <div style="font-size:0.75rem;color:var(--text-muted)">Full system access</div>
+    </div>
+
+    <div class="sidebar-section-title">Management</div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-nav-item" data-tab="dashboard">
+        <span class="icon">📊</span> Dashboard
+      </button>
+      <button class="sidebar-nav-item" data-tab="products">
+        <span class="icon">🛍️</span> Products
+      </button>
+      <button class="sidebar-nav-item" data-tab="requests">
+        <span class="icon">📦</span> User Requests
+      </button>
+      <button class="sidebar-nav-item" data-tab="users">
+        <span class="icon">👥</span> Users
+      </button>
+    </nav>
+
+    <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border)">
+      <a href="index.html" class="sidebar-nav-item" style="text-decoration:none">
+        <span class="icon">🌐</span> View Website
+      </a>
+      <button class="sidebar-nav-item" onclick="handleLogout()" style="color:var(--error)">
+        <span class="icon">🚪</span> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="panel-content">
+
+    <!-- ── Dashboard Tab ─────────────────────────────────────── -->
+    <div class="admin-tab-content" id="tab-dashboard">
+      <div style="margin-bottom:2rem">
+        <div class="section-label">Overview</div>
+        <h1 style="font-family:'Bebas Neue';font-size:2.5rem;color:var(--text);letter-spacing:0.03em">Dashboard</h1>
+      </div>
+      <div class="grid-4" id="admin-stats">
+        <!-- Rendered by admin.js -->
+      </div>
+
+      <div style="margin-top:2rem">
+        <div class="info-banner">
+          <span class="info-banner-icon">💡</span>
+          <span>Use the sidebar to manage products, review user requests, and view registered users.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Products Tab ──────────────────────────────────────── -->
+    <div class="admin-tab-content hidden" id="tab-products">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
+        <div>
+          <div class="section-label">Manage</div>
+          <h1 style="font-family:'Bebas Neue';font-size:2.5rem;color:var(--text);letter-spacing:0.03em">Products</h1>
+        </div>
+        <button class="btn btn-primary" onclick="openProductForm()">➕ Add New Product</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Flags</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-products-table-body">
+            <!-- Rendered by admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Requests Tab ──────────────────────────────────────── -->
+    <div class="admin-tab-content hidden" id="tab-requests">
+      <div style="margin-bottom:2rem">
+        <div class="section-label">Customer Requests</div>
+        <h1 style="font-family:'Bebas Neue';font-size:2.5rem;color:var(--text);letter-spacing:0.03em">User Requests</h1>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-top:0.25rem">
+          Product requests submitted by registered users — with their name, phone, and delivery address.
+        </p>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Phone</th>
+              <th>Product Wanted</th>
+              <th>Delivery Address</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Update Status</th>
+            </tr>
+          </thead>
+          <tbody id="admin-requests-body">
+            <!-- Rendered by admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Users Tab ─────────────────────────────────────────── -->
+    <div class="admin-tab-content hidden" id="tab-users">
+      <div style="margin-bottom:2rem">
+        <div class="section-label">Accounts</div>
+        <h1 style="font-family:'Bebas Neue';font-size:2.5rem;color:var(--text);letter-spacing:0.03em">Registered Users</h1>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-top:0.25rem">
+          All users who have created an account on the ZENTRA website.
+        </p>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Joined</th>
+            </tr>
+          </thead>
+          <tbody id="admin-users-body">
+            <!-- Rendered by admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div id="toast-container"></div>
+<script src="js/config.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

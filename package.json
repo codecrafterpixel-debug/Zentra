@@ -1,0 +1,12 @@
+{
+  "name": "zentra-products-api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node api/health.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.31.0",
+    "cors": "^2.8.0"
+  }
+}
