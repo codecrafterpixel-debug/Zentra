@@ -1131,6 +1131,140 @@
   .panel-content { padding: 1.5rem 1rem; }
 }
 
+@media (max-width: 480px) {
+  .panel-content { padding: 1.25rem 0.8rem; }
+  .panel-sidebar { padding: 0.85rem; }
+  .sidebar-nav-item {
+    font-size: 0.8rem;
+    padding: 0.55rem 0.75rem;
+    gap: 0.5rem;
+  }
+  .sidebar-section-title {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.68rem;
+  }
+  .table th,
+  .table td {
+    padding: 0.75rem 0.75rem;
+  }
+  .table th {
+    font-size: 0.68rem;
+  }
+  .table td {
+    font-size: 0.76rem;
+  }
+  .table-wrapper {
+    border-radius: var(--radius-md);
+  }
+  .table-img {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 375px) {
+  .panel-content { padding: 1rem 0.75rem; }
+  .panel-sidebar { padding: 0.75rem; }
+  .sidebar-nav-item {
+    font-size: 0.78rem;
+    padding: 0.5rem 0.65rem;
+  }
+  .sidebar-nav-item .icon { font-size: 1rem; }
+  .table th,
+  .table td {
+    padding: 0.55rem 0.55rem;
+  }
+  .table th {
+    font-size: 0.65rem;
+  }
+  .table td {
+    font-size: 0.72rem;
+  }
+  .table-wrapper {
+    border-radius: var(--radius-sm);
+  }
+  .table {
+    font-size: 0.76rem;
+  }
+  .table thead {
+    display: none;
+  }
+  .table tr {
+    display: block;
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    white-space: normal;
+  }
+  .table td::before {
+    content: attr(data-label);
+    flex: 1 0 45%;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 0.6rem;
+  }
+  .table td:last-child {
+    justify-content: flex-start;
+  }
+  .table-img {
+    width: 34px;
+    height: 34px;
+  }
+  .product-card {
+    width: 100%;
+  }
+  .product-card-image { aspect-ratio: 3 / 4; }
+  .product-card-body { padding: 0.85rem; }
+  .product-name { font-size: 0.95rem; }
+  .product-description { font-size: 0.75rem; }
+  .price-current { font-size: 1rem; }
+  .price-original { font-size: 0.72rem; }
+  .product-price-row { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+  .product-price { gap: 0.35rem; }
+}
+
+@media (max-width: 320px) {
+  .panel-content { padding: 0.95rem 0.65rem; }
+  .panel-sidebar { padding: 0.65rem; }
+  .sidebar-nav-item {
+    font-size: 0.72rem;
+    padding: 0.45rem 0.6rem;
+    gap: 0.4rem;
+  }
+  .sidebar-section-title {
+    font-size: 0.64rem;
+    padding: 0.35rem 0.55rem;
+  }
+  .table th,
+  .table td {
+    padding: 0.45rem 0.45rem;
+  }
+  .table th { font-size: 0.62rem; }
+  .table td { font-size: 0.7rem; }
+  .table-img { width: 30px; height: 30px; }
+  .table tr { margin-bottom: 0.6rem; }
+  .table td::before {
+    font-size: 0.62rem;
+    margin-right: 0.4rem;
+  }
+  .product-card-image { aspect-ratio: 4 / 5; }
+  .product-card-body { padding: 0.75rem; }
+  .product-name { font-size: 0.9rem; }
+  .product-description { font-size: 0.72rem; }
+  .price-current { font-size: 0.95rem; }
+  .price-original { font-size: 0.7rem; }
+  .product-price-row { gap: 0.25rem; }
+}
+
 /* ── Confirm Dialog ───────────────────────────────────────── */
 .confirm-dialog {
   max-width: 400px;
