@@ -341,9 +341,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     await Storage.getProductsAsync();
+    await Storage.getUsersAsync();
+    await Storage.getRequestsAsync();
     refreshSharedViews();
   } catch (e) {
-    console.warn("Failed to hydrate products from shared API:", e);
+    console.warn("Failed to hydrate shared data from backend:", e);
   }
 
   window.addEventListener("zentra:products-changed", () => {
