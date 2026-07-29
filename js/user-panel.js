@@ -5,45 +5,45 @@
 
 // ── Init ──────────────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (!document.getElementById('user-panel')) return;
-  if (!Auth.requireAuth('auth.html')) return;
+document.addEventListener("DOMContentLoaded", () => {
+  if (!document.getElementById("user-panel")) return;
+  if (!Auth.requireAuth("auth.html")) return;
 
   const session = Auth.getSession();
 
   // Populate profile
-  const nameEl   = document.getElementById('up-name');
-  const emailEl  = document.getElementById('up-email');
-  const phoneEl  = document.getElementById('up-phone');
-  const initialEl = document.getElementById('up-initial');
+  const nameEl = document.getElementById("up-name");
+  const emailEl = document.getElementById("up-email");
+  const phoneEl = document.getElementById("up-phone");
+  const initialEl = document.getElementById("up-initial");
 
-  if (nameEl)    nameEl.textContent  = session.name;
-  if (emailEl)   emailEl.textContent = session.email;
-  if (phoneEl)   phoneEl.textContent = session.phone || '—';
+  if (nameEl) nameEl.textContent = session.name;
+  if (emailEl) emailEl.textContent = session.email;
+  if (phoneEl) phoneEl.textContent = session.phone || "—";
   if (initialEl) initialEl.textContent = session.name.charAt(0).toUpperCase();
 
   // Pre-fill product name from URL param
   const params = new URLSearchParams(window.location.search);
-  const preProduct = params.get('product');
+  const preProduct = params.get("product");
   if (preProduct) {
-    const el = document.getElementById('r-product-name');
+    const el = document.getElementById("r-product-name");
     if (el) el.value = decodeURIComponent(preProduct);
     // Switch to request tab
-    switchUserTab('request');
+    switchUserTab("request");
   }
 
   // Sidebar tabs
-  document.querySelectorAll('.sidebar-nav-item[data-tab]').forEach((el) => {
-    el.addEventListener('click', () => switchUserTab(el.dataset.tab));
+  document.querySelectorAll(".sidebar-nav-item[data-tab]").forEach((el) => {
+    el.addEventListener("click", () => switchUserTab(el.dataset.tab));
   });
 
   // Default tab
-  switchUserTab('request');
+  switchUserTab("request");
 
   // Request form submit
-  const form = document.getElementById('request-form');
+  const form = document.getElementById("request-form");
   if (form) {
-    form.addEventListener('submit', submitUserRequest);
+    form.addEventListener("submit", submitUserRequest);
   }
 
   renderUserRequests();
@@ -52,14 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // ── Tab Switch ────────────────────────────────────────────────────────────
 
 function switchUserTab(tab) {
-  document.querySelectorAll('.sidebar-nav-item[data-tab]').forEach((el) => {
-    el.classList.toggle('active', el.dataset.tab === tab);
+  document.querySelectorAll(".sidebar-nav-item[data-tab]").forEach((el) => {
+    el.classList.toggle("active", el.dataset.tab === tab);
   });
-  document.querySelectorAll('.user-tab-content').forEach((el) => {
-    el.classList.toggle('hidden', el.id !== `utab-${tab}`);
+  document.querySelectorAll(".user-tab-content").forEach((el) => {
+    el.classList.toggle("hidden", el.id !== `utab-${tab}`);
   });
 
-  if (tab === 'history') renderUserRequests();
+  if (tab === "history") renderUserRequests();
 }
 
 // ── Submit Request ────────────────────────────────────────────────────────
@@ -68,34 +68,37 @@ async function submitUserRequest(e) {
   e.preventDefault();
   const session = Auth.getSession();
 
-  const productName = document.getElementById('r-product-name')?.value?.trim();
-  const description = document.getElementById('r-description')?.value?.trim();
-  const size        = document.getElementById('r-size')?.value;
-  const quantity    = parseInt(document.getElementById('r-quantity')?.value) || 1;
-  const line1       = document.getElementById('r-addr-line1')?.value?.trim();
-  const city        = document.getElementById('r-addr-city')?.value?.trim();
-  const state       = document.getElementById('r-addr-state')?.value?.trim();
-  const pincode     = document.getElementById('r-addr-pincode')?.value?.trim();
+  const productName = document.getElementById("r-product-name")?.value?.trim();
+  const description = document.getElementById("r-description")?.value?.trim();
+  const size = document.getElementById("r-size")?.value;
+  const quantity = parseInt(document.getElementById("r-quantity")?.value) || 1;
+  const line1 = document.getElementById("r-addr-line1")?.value?.trim();
+  const city = document.getElementById("r-addr-city")?.value?.trim();
+  const state = document.getElementById("r-addr-state")?.value?.trim();
+  const pincode = document.getElementById("r-addr-pincode")?.value?.trim();
 
   // Validate
   if (!productName) {
-    showFormError('r-product-name', 'Please enter a product name or description.');
+    showFormError(
+      "r-product-name",
+      "Please enter a product name or description.",
+    );
     return;
   }
   if (!line1 || !city || !state || !pincode) {
-    showToast('Please complete your full delivery address.', 'error');
+    showToast("Please complete your full delivery address.", "error");
     return;
   }
   if (!/^\d{6}$/.test(pincode)) {
-    showFormError('r-addr-pincode', 'Please enter a valid 6-digit pincode.');
+    showFormError("r-addr-pincode", "Please enter a valid 6-digit pincode.");
     return;
   }
 
   const requestData = {
-    userId:      session.id,
-    userName:    session.name,
-    userEmail:   session.email,
-    userPhone:   session.phone || '—',
+    userId: session.id,
+    userName: session.name,
+    userEmail: session.email,
+    userPhone: session.phone || "—",
     productName,
     description,
     size,
@@ -103,37 +106,45 @@ async function submitUserRequest(e) {
     address: { line1, city, state, pincode },
   };
 
-  const btn = document.getElementById('submit-request-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Submitting & Opening WhatsApp...'; }
+  const btn = document.getElementById("submit-request-btn");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "Submitting & Opening WhatsApp...";
+  }
 
-  const savedRequest = Storage.addRequest(requestData);
+  const savedRequest = await Storage.addRequest(requestData);
 
-  // Send WhatsApp Direct Notification to Admin (+91 8128033449)
+  // Send WhatsApp Direct Notification to Admin (+91 9662781902)
   WhatsAppService.sendNotification(requestData);
 
-  showToast('Request saved & opening WhatsApp to notify admin! 💬', 'success');
-  document.getElementById('request-form')?.reset();
+  showToast("Request saved & opening WhatsApp to notify admin! 💬", "success");
+  document.getElementById("request-form")?.reset();
 
-  if (btn) { btn.disabled = false; btn.textContent = '💬 Submit & Send via WhatsApp'; }
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = "💬 Submit & Send via WhatsApp";
+  }
 
   // Show success state
   renderUserRequests();
-  switchUserTab('history');
+  switchUserTab("history");
 }
 
 function showFormError(inputId, msg) {
   const input = document.getElementById(inputId);
   if (!input) return;
-  input.style.borderColor = 'var(--error)';
+  input.style.borderColor = "var(--error)";
   input.focus();
-  showToast(msg, 'error');
-  setTimeout(() => { input.style.borderColor = ''; }, 3000);
+  showToast(msg, "error");
+  setTimeout(() => {
+    input.style.borderColor = "";
+  }, 3000);
 }
 
 // ── Request History ───────────────────────────────────────────────────────
 
 function renderUserRequests() {
-  const container = document.getElementById('user-requests-list');
+  const container = document.getElementById("user-requests-list");
   if (!container) return;
 
   const session = Auth.getSession();
@@ -151,15 +162,17 @@ function renderUserRequests() {
     return;
   }
 
-  container.innerHTML = requests.map((r) => `
+  container.innerHTML = requests
+    .map(
+      (r) => `
     <div class="request-history-card">
       <div class="request-history-header">
         <div>
           <div class="request-product-name">${r.productName}</div>
           <div class="request-meta">
-            ${r.size ? `Size: <strong>${r.size}</strong>` : ''}
-            ${r.size && r.quantity ? ' &nbsp;·&nbsp; ' : ''}
-            ${r.quantity ? `Qty: <strong>${r.quantity}</strong>` : ''}
+            ${r.size ? `Size: <strong>${r.size}</strong>` : ""}
+            ${r.size && r.quantity ? " &nbsp;·&nbsp; " : ""}
+            ${r.quantity ? `Qty: <strong>${r.quantity}</strong>` : ""}
           </div>
         </div>
         <div style="text-align:right;flex-shrink:0">
@@ -170,22 +183,34 @@ function renderUserRequests() {
         </div>
       </div>
 
-      ${r.description ? `
+      ${
+        r.description
+          ? `
         <div style="font-size:0.82rem;color:var(--text-muted);line-height:1.6;margin-bottom:0.5rem">${r.description}</div>
-      ` : ''}
+      `
+          : ""
+      }
 
       <div class="request-address-chip">
         <span>📍</span>
-        <span>${r.address
-          ? `${r.address.line1}, ${r.address.city}, ${r.address.state} — ${r.address.pincode}`
-          : 'No address provided'}</span>
+        <span>${
+          r.address
+            ? `${r.address.line1}, ${r.address.city}, ${r.address.state} — ${r.address.pincode}`
+            : "No address provided"
+        }</span>
       </div>
 
-      ${r.adminNotes ? `
+      ${
+        r.adminNotes
+          ? `
         <div class="request-admin-note">
           <strong>💬 Admin Note:</strong> ${r.adminNotes}
         </div>
-      ` : ''}
+      `
+          : ""
+      }
     </div>
-  `).join('');
+  `,
+    )
+    .join("");
 }
