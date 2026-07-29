@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description"
+      content="Your ZENTRA account — request products, track your orders, and manage your profile." />
+    <link rel="icon" type="image/png" href="logo.png" />
+    <title>My Panel — ZENTRA</title>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <style>
+    /* ── User Panel Specific Styles ─────────────────────────── */
+
+    .up-profile-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent) 0%, #b8860b 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #000;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 3px var(--accent-glow), 0 4px 20px rgba(200,169,110,0.3);
+    }
+
+    .up-profile-block {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+
+    .up-profile-info {
+      min-width: 0;
+    }
+
+    .up-profile-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .up-profile-email {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .up-profile-phone {
+      font-size: 0.72rem;
+      color: var(--accent);
+      margin-top: 0.1rem;
+    }
+
+    /* ── Request Form ─────────────────────────────────────── */
+    .request-section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .address-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 560px) {
+      .address-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── Request History Cards ─────────────────────────────── */
+    .request-history-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      transition: border-color var(--transition);
+    }
+
+    .request-history-card:hover {
+      border-color: var(--border-accent);
+    }
+
+    .request-history-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .request-product-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .request-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .request-address-chip {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--surface-3);
+      border-radius: var(--radius);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .request-admin-note {
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--accent-glow);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    /* ── Sidebar Mobile Toggle ───────────────────────────── */
+    .panel-sidebar-toggle {
+      display: none;
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 500;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #000;
+      font-size: 1.2rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(200,169,110,0.4);
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+      .panel-sidebar-toggle {
+        display: flex;
+      }
+
+      .panel-sidebar.mobile-open {
+        transform: translateX(0) !important;
+        box-shadow: var(--shadow-lg);
+      }
+    }
+
+    /* ── Empty State ─────────────────────────────────────── */
+    .up-empty {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .up-empty-icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .up-empty-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .up-empty-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      max-width: 340px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    /* ── Whatsapp CTA ─────────────────────────────────────── */
+    .wa-cta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.875rem 1.25rem;
+      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+      border-radius: var(--radius-lg);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 4px 16px rgba(37,211,102,0.25);
+    }
+
+    .wa-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(37,211,102,0.35);
+    }
+
+    /* ── Panel Tip Banner ─────────────────────────────────── */
+    .panel-tip {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+      background: var(--accent-glow);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      font-size: 0.82rem;
+      color: var(--text-2);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-tip-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Status badges extra ───────────────────────────────── */
+    .badge-status-pending   { background: rgba(255,165,0,0.15); color: #ffaa00; border: 1px solid rgba(255,165,0,0.3); }
+    .badge-status-reviewed  { background: rgba(100,149,237,0.15); color: #6495ed; border: 1px solid rgba(100,149,237,0.3); }
+    .badge-status-confirmed { background: rgba(50,205,50,0.15); color: #32cd32; border: 1px solid rgba(50,205,50,0.3); }
+    .badge-status-rejected  { background: rgba(220,20,60,0.15); color: #dc143c; border: 1px solid rgba(220,20,60,0.3); }
+  </style>
+  </head>
+
+  <body id="user-panel">
+
+    <!-- ── Navbar ──────────────────────────────────────────────────────── -->
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+          <img src="logo.png" alt="ZENTRA" class="nav-logo-img" />
+        </a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="products.html" class="nav-link">Shop</a>
+        </div>
+        <div class="nav-actions" id="nav-actions"></div>
+        <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="index.html" class="mobile-nav-link">Home</a>
+      <a href="products.html" class="mobile-nav-link">Shop</a>
+    </div>
+
+    <!-- ── Panel Layout ────────────────────────────────────────────────── -->
+    <div class="panel-layout">
+
+      <!-- ── Sidebar ──────────────────────────────────────────────────── -->
+      <aside class="panel-sidebar" id="panel-sidebar">
+
+        <!-- Profile Block -->
+        <div class="up-profile-block">
+          <div class="up-profile-avatar" id="up-initial">U</div>
+          <div class="up-profile-info">
+            <div class="up-profile-name" id="up-name">Loading…</div>
+            <div class="up-profile-email" id="up-email">—</div>
+            <div class="up-profile-phone" id="up-phone">—</div>
+          </div>
+        </div>
+
+        <div class="sidebar-section-title">My Account</div>
+        <nav class="sidebar-nav">
+          <button class="sidebar-nav-item active" data-tab="request">
+            <span class="icon">📝</span> Request a Product
+          </button>
+          <button class="sidebar-nav-item" data-tab="history">
+            <span class="icon">📦</span> My Requests
+          </button>
+        </nav>
+
+        <div
+          style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border)">
+          <a href="products.html" class="sidebar-nav-item"
+            style="text-decoration:none">
+            <span class="icon">🛍️</span> Browse Products
+          </a>
+          <a href="index.html" class="sidebar-nav-item"
+            style="text-decoration:none">
+            <span class="icon">🏠</span> Back to Home
+          </a>
+          <button class="sidebar-nav-item" onclick="handleLogout()"
+            style="color:var(--error)">
+            <span class="icon">🚪</span> Logout
+          </button>
+        </div>
+      </aside>
+
+      <!-- ── Main Content ─────────────────────────────────────────────── -->
+      <main class="panel-content">
+
+        <!-- ══ TAB: Request a Product ══════════════════════════════════ -->
+        <div class="user-tab-content" id="utab-request">
+
+          <div style="margin-bottom:2rem">
+            <div class="section-label">Place a Request</div>
+            <h1
+              style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--text);letter-spacing:0.03em;line-height:1">
+              Request a Product
+            </h1>
+            <p
+              style="color:var(--text-muted);font-size:0.875rem;margin-top:0.5rem">
+              Tell us what you want — we'll confirm availability and send it
+              straight to your door.
+            </p>
+          </div>
+
+          <!-- Tip Banner -->
+          <div class="panel-tip">
+            <span class="panel-tip-icon">💬</span>
+            <div>
+              After submitting, <strong>WhatsApp will open
+                automatically</strong> to send your request directly to our
+              admin. Please send the pre-filled message for instant
+              confirmation.
+            </div>
+          </div>
+
+          <!-- Request Form -->
+          <form id="request-form" autocomplete="off">
+
+            <!-- Product Details -->
+            <div class="request-section-title">👕 Product Details</div>
+
+            <div class="form-group">
+              <label class="form-label" for="r-product-name">
+                Product Name / Description <span class="required">*</span>
+              </label>
+              <input
+                class="form-input"
+                id="r-product-name"
+                type="text"
+                placeholder="e.g. Street Noise Oversized Tee — Black"
+                required />
+              <span class="form-hint">Enter the product name exactly as shown on
+                the website, or describe what you're looking for.</span>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+              <div class="form-group">
+                <label class="form-label" for="r-size">Size</label>
+                <select class="form-select" id="r-size">
+                  <option value>Select size</option>
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="XXL">XXL</option>
+                  <option value="XXXL">XXXL</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="r-quantity">Quantity</label>
+                <input
+                  class="form-input"
+                  id="r-quantity"
+                  type="number"
+                  min="1"
+                  max="50"
+                  value="1"
+                  placeholder="1" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="r-description">Additional
+                Notes</label>
+              <textarea
+                class="form-textarea"
+                id="r-description"
+                placeholder="e.g. Colour preference, custom print requirements, or any special instructions…"
+                rows="3"></textarea>
+            </div>
+
+            <!-- Delivery Address -->
+            <div class="request-section-title" style="margin-top:1.75rem">📍
+              Delivery Address</div>
+
+            <div class="form-group">
+              <label class="form-label" for="r-addr-line1">
+                Street / Flat / Area <span class="required">*</span>
+              </label>
+              <input
+                class="form-input"
+                id="r-addr-line1"
+                type="text"
+                placeholder="e.g. Flat 12B, Shiv Complex, MG Road"
+                required />
+            </div>
+
+            <div class="address-grid">
+              <div class="form-group">
+                <label class="form-label" for="r-addr-city">
+                  City <span class="required">*</span>
+                </label>
+                <input
+                  class="form-input"
+                  id="r-addr-city"
+                  type="text"
+                  placeholder="e.g. Ahmedabad"
+                  required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="r-addr-state">
+                  State <span class="required">*</span>
+                </label>
+                <input
+                  class="form-input"
+                  id="r-addr-state"
+                  type="text"
+                  placeholder="e.g. Gujarat"
+                  required />
+              </div>
+            </div>
+
+            <div class="form-group" style="max-width:220px">
+              <label class="form-label" for="r-addr-pincode">
+                Pincode <span class="required">*</span>
+              </label>
+              <input
+                class="form-input"
+                id="r-addr-pincode"
+                type="text"
+                inputmode="numeric"
+                maxlength="6"
+                placeholder="6-digit pincode"
+                required />
+            </div>
+
+            <!-- Submit -->
+            <div
+              style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                id="submit-request-btn">
+                💬 Submit &amp; Send via WhatsApp
+              </button>
+              <button type="reset" class="btn btn-ghost">Clear Form</button>
+            </div>
+
+            <p
+              style="font-size:0.75rem;color:var(--text-muted);margin-top:1rem;line-height:1.6">
+              🔒 Your details are only shared with the ZENTRA admin to process
+              your order. We never share your data with third parties.
+            </p>
+
+          </form>
+        </div>
+
+        <!-- ══ TAB: My Requests ═════════════════════════════════════════ -->
+        <div class="user-tab-content hidden" id="utab-history">
+
+          <div
+            style="margin-bottom:2rem;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+            <div>
+              <div class="section-label">Order Tracking</div>
+              <h1
+                style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--text);letter-spacing:0.03em;line-height:1">
+                My Requests
+              </h1>
+              <p
+                style="color:var(--text-muted);font-size:0.875rem;margin-top:0.5rem">
+                Track the status of all your product requests.
+              </p>
+            </div>
+            <button class="btn btn-primary" onclick="switchUserTab('request')">
+              + New Request
+            </button>
+          </div>
+
+          <!-- Status Legend -->
+          <div
+            style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem">
+            <span class="badge badge-status-pending">Pending</span>
+            <span class="badge badge-status-reviewed">Reviewed</span>
+            <span class="badge badge-status-confirmed">Confirmed</span>
+            <span class="badge badge-status-rejected">Rejected</span>
+          </div>
+
+          <!-- Requests List Container -->
+          <div id="user-requests-list">
+            <!-- Rendered by user-panel.js -->
+            <div class="up-empty">
+              <span class="up-empty-icon">📭</span>
+              <div class="up-empty-title">No requests yet</div>
+              <div class="up-empty-desc">Submit your first product request using
+                the form and our team will get back to you via WhatsApp.</div>
+              <button class="btn btn-primary"
+                onclick="switchUserTab('request')">Make a Request</button>
+            </div>
+          </div>
+
+          <!-- WhatsApp Direct Contact -->
+          <div
+            style="margin-top:2.5rem;padding:1.5rem;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-xl)">
+            <div
+              style="font-weight:700;font-size:0.9rem;color:var(--text);margin-bottom:0.4rem">Need
+              help with your order?</div>
+            <div
+              style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem;line-height:1.6">
+              You can also reach out to us directly on WhatsApp for faster
+              support.
+            </div>
+            <a
+              href="https://wa.me/919662781902?text=Hi%20ZENTRA%2C%20I%20need%20help%20with%20my%20order."
+              target="_blank"
+              rel="noopener"
+              class="wa-cta"
+              style="display:inline-flex">
+              <svg width="18" height="18" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                <path
+                  d="M12 0C5.373 0 0 5.373 0 12c0 2.124.553 4.117 1.52 5.845L.058 23.454a.5.5 0 0 0 .615.612l5.741-1.5A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.008-1.37l-.36-.214-3.718.973.996-3.635-.235-.374A9.818 9.818 0 1 1 12 21.818z" />
+              </svg>
+              Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <!-- Mobile sidebar FAB -->
+    <button class="panel-sidebar-toggle" id="sidebar-fab" title="Toggle Menu"
+      aria-label="Toggle Sidebar">
+      ☰
+    </button>
+
+    <div id="toast-container"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/whatsapp.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/user-panel.js"></script>
+    <script>
+    // Mobile sidebar FAB
+    document.addEventListener('DOMContentLoaded', () => {
+      const fab = document.getElementById('sidebar-fab');
+      const sidebar = document.getElementById('panel-sidebar');
+      if (fab && sidebar) {
+        fab.addEventListener('click', () => {
+          sidebar.classList.toggle('mobile-open');
+          fab.textContent = sidebar.classList.contains('mobile-open') ? '✕' : '☰';
+        });
+        // Close on nav item click (mobile)
+        sidebar.querySelectorAll('.sidebar-nav-item').forEach(el => {
+          el.addEventListener('click', () => {
+            sidebar.classList.remove('mobile-open');
+            fab.textContent = '☰';
+          });
+        });
+      }
+    });
+  </script>
+  </body>
+
+</html>
