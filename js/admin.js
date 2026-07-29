@@ -403,9 +403,13 @@ function renderAdminRequests() {
     .join("");
 }
 
-function updateRequestStatus(requestId, newStatus) {
-  Storage.updateRequest(requestId, { status: newStatus });
-  showToast(`Request status updated to "${newStatus}".`, "success");
+async function updateRequestStatus(requestId, newStatus) {
+  const updated = await Storage.updateRequest(requestId, { status: newStatus });
+  if (updated) {
+    showToast(`Request status updated to "${newStatus}".`, "success");
+  } else {
+    showToast("Unable to update request status.", "error");
+  }
   renderDashboardStats();
 }
 
