@@ -94,22 +94,22 @@ function renderAdminProducts() {
     .map(
       (p) => `
     <tr>
-      <td>
+      <td data-label="Image">
         <img class="table-img" src="${p.images?.[0] || ""}" alt="${p.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><rect width=%2240%22 height=%2240%22 fill=%22%23222%22/></svg>'"/>
       </td>
-      <td><strong>${p.name}</strong></td>
-      <td><span class="filter-chip" style="cursor:default">${categoryLabel(p.category)}</span></td>
-      <td><strong>${formatPrice(p.price)}</strong></td>
-      <td>
+      <td data-label="Name"><strong>${p.name}</strong></td>
+      <td data-label="Category"><span class="filter-chip" style="cursor:default">${categoryLabel(p.category)}</span></td>
+      <td data-label="Price"><strong>${formatPrice(p.price)}</strong></td>
+      <td data-label="Stock">
         <span class="badge ${p.stock === "instock" ? "badge-instock" : "badge-outofstock"}">
           ${p.stock === "instock" ? "● In Stock" : "○ Out of Stock"}
         </span>
       </td>
-      <td>
+      <td data-label="Flags">
         ${p.trending ? '<span class="badge badge-trending">🔥</span>' : ""}
         ${p.newArrival ? '<span class="badge badge-new">✨</span>' : ""}
       </td>
-      <td>
+      <td data-label="Actions">
         <div style="display:flex;gap:0.5rem">
           <button class="btn btn-ghost btn-icon btn-icon-sm" onclick="openProductForm('${p.id}')" title="Edit">✏️</button>
           <button class="btn btn-danger btn-icon btn-icon-sm" onclick="deleteProduct('${p.id}')" title="Delete">🗑️</button>
@@ -370,25 +370,25 @@ function renderAdminRequests() {
     .map(
       (r) => `
     <tr>
-      <td>
+      <td data-label="User">
         <div style="font-weight:600;font-size:0.875rem">${r.userName}</div>
         <div style="font-size:0.75rem;color:var(--text-muted)">${r.userEmail || ""}</div>
       </td>
-      <td>
+      <td data-label="Phone">
         <div style="font-size:0.8rem;color:var(--text-muted)">${r.userPhone}</div>
       </td>
-      <td>
+      <td data-label="Product Wanted">
         <div style="font-weight:600;font-size:0.875rem">${r.productName}</div>
         ${r.size ? `<div style="font-size:0.75rem;color:var(--text-muted)">Size: ${r.size} • Qty: ${r.quantity || 1}</div>` : ""}
       </td>
-      <td style="max-width:180px">
+      <td data-label="Delivery Address" style="max-width:180px">
         <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.4">
           ${r.address ? `${r.address.line1}, ${r.address.city}, ${r.address.state} - ${r.address.pincode}` : "—"}
         </div>
       </td>
-      <td>${statusBadgeHtml(r.status)}</td>
-      <td style="font-size:0.75rem;color:var(--text-muted)">${formatDate(r.createdAt)}</td>
-      <td>
+      <td data-label="Status">${statusBadgeHtml(r.status)}</td>
+      <td data-label="Date" style="font-size:0.75rem;color:var(--text-muted)">${formatDate(r.createdAt)}</td>
+      <td data-label="Update Status">
         <select class="form-select" style="padding:0.3rem 0.6rem;font-size:0.78rem;width:auto"
           onchange="updateRequestStatus('${r.id}', this.value)">
           <option value="pending"   ${r.status === "pending" ? "selected" : ""}>Pending</option>
@@ -438,7 +438,7 @@ function renderAdminUsers() {
     .map(
       (u) => `
     <tr>
-      <td>
+      <td data-label="User">
         <div style="display:flex;align-items:center;gap:0.75rem">
           <div class="testimonial-avatar" style="width:36px;height:36px;font-size:0.8rem">${u.name[0]}</div>
           <div>
@@ -447,11 +447,11 @@ function renderAdminUsers() {
           </div>
         </div>
       </td>
-      <td style="font-size:0.875rem">📱 ${u.phone}</td>
-      <td>
+      <td data-label="Phone" style="font-size:0.875rem">📱 ${u.phone}</td>
+      <td data-label="Status">
         <span class="badge badge-instock">Active</span>
       </td>
-      <td style="font-size:0.75rem;color:var(--text-muted)">${formatDate(u.createdAt)}</td>
+      <td data-label="Joined" style="font-size:0.75rem;color:var(--text-muted)">${formatDate(u.createdAt)}</td>
     </tr>
   `,
     )
