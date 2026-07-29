@@ -1,0 +1,13 @@
+{
+  "name": "zentra-products-api",
+  "version": "1.0.0",
+  "main": "api/products.js",
+  "scripts": {
+    "start": "node api/products.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.0",
+    "express": "^4.19.2",
+    "pg": "^8.11.2"
+  }
+}
