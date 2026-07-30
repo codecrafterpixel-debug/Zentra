@@ -20,12 +20,12 @@ const Auth = {
       return { success: false, error: "Please enter your email and password." };
     }
 
-    const normalizedInput = email.trim().toLowerCase();
+    const normalizedInput = email.trim();
     const normalizedPassword = password.trim();
 
     // Admin login
     if (
-      normalizedInput === ADMIN_CREDS.email.toLowerCase() &&
+      normalizedInput === ADMIN_CREDS.email &&
       normalizedPassword === ADMIN_CREDS.password
     ) {
       const session = {
@@ -42,7 +42,7 @@ const Auth = {
     let users = Storage.getUsers();
     let user = users.find(
       (u) =>
-        (u.email && u.email.toLowerCase() === normalizedInput) ||
+        (u.email && u.email === normalizedInput) ||
         (u.phone && u.phone.replace(/\s/g, "") === normalizedInput),
     );
 
@@ -50,7 +50,7 @@ const Auth = {
       users = await Storage.getUsersAsync();
       user = users.find(
         (u) =>
-          (u.email && u.email.toLowerCase() === normalizedInput) ||
+          (u.email && u.email === normalizedInput) ||
           (u.phone && u.phone.replace(/\s/g, "") === normalizedInput),
       );
     }
@@ -82,7 +82,7 @@ const Auth = {
    */
   async register(name, email, phone, password) {
     name = name?.trim();
-    email = email?.trim().toLowerCase();
+    email = email?.trim();
     phone = phone?.trim().replace(/\s/g, "");
     password = password?.trim();
 
