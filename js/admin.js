@@ -460,7 +460,7 @@ function renderAdminUsers() {
 
 // ── Init ──────────────────────────────────────────────────────────────────
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   if (!document.getElementById("admin-panel")) return;
   if (!checkAdminAuth()) return;
 
@@ -473,6 +473,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".sidebar-nav-item[data-tab]").forEach((el) => {
     el.addEventListener("click", () => switchAdminTab(el.dataset.tab));
   });
+
+  // Pre-load data from backend
+  await Promise.all([
+    Storage.getProductsAsync(),
+    Storage.getRequestsAsync(),
+    Storage.getUsersAsync()
+  ]);
 
   // Start on dashboard
   switchAdminTab("dashboard");
