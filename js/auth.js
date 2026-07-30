@@ -25,7 +25,7 @@ const Auth = {
 
     // Admin login
     if (
-      normalizedInput === ADMIN_CREDS.email &&
+      normalizedInput === ADMIN_CREDS.email.toLowerCase() &&
       normalizedPassword === ADMIN_CREDS.password
     ) {
       const session = {
