@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Login or create your ZENTRA account to request products and track your orders." />
-  <link rel="icon" type="image/png" href="logo.png" />
-  <title>Login / Sign Up — ZENTRA</title>
-  <link rel="stylesheet" href="css/main.css" />
-  <link rel="stylesheet" href="css/animations.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/preloader.css" />
-  <style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+      content="Login or create your ZENTRA account to request products and track your orders." />
+    <link rel="icon" type="image/png" href="logo.png" />
+    <title>Login / Sign Up — ZENTRA</title>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/preloader.css" />
+    <style>
     .auth-page {
       min-height: 100vh;
       display: flex;
@@ -197,139 +198,162 @@
       }
     }
   </style>
-</head>
+  </head>
 
-<body>
+  <body>
 
-  <!-- ── Preloader ─────────────────────────────────── -->
-  <div id="preloader">
-    <div class="preloader-inner">
-      <div class="preloader-glow">
-        <img src="logo.png" alt="ZENTRA" class="preloader-logo" />
-      </div>
-      <div class="preloader-brand">ZENTRA</div>
-      <div class="preloader-tagline">Wear The Standard</div>
-      <div class="preloader-bar-wrap">
-        <div class="preloader-bar-fill"></div>
-      </div>
-      <div class="preloader-dots">
-        <span class="preloader-dot"></span>
-        <span class="preloader-dot"></span>
-        <span class="preloader-dot"></span>
+    <!-- ── Preloader ─────────────────────────────────── -->
+    <div id="preloader">
+      <div class="preloader-inner">
+        <div class="preloader-glow">
+          <img src="logo.png" alt="ZENTRA" class="preloader-logo" />
+        </div>
+        <div class="preloader-brand">ZENTRA</div>
+        <div class="preloader-tagline">Wear The Standard</div>
+        <div class="preloader-bar-wrap">
+          <div class="preloader-bar-fill"></div>
+        </div>
+        <div class="preloader-dots">
+          <span class="preloader-dot"></span>
+          <span class="preloader-dot"></span>
+          <span class="preloader-dot"></span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
-        <img src="logo.png" alt="ZENTRA" class="nav-logo-img" />
-      </a>
-      <div class="nav-links">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="products.html" class="nav-link">Shop</a>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+          <img src="logo.png" alt="ZENTRA" class="nav-logo-img" />
+        </a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="products.html" class="nav-link">Shop</a>
+        </div>
+        <div class="nav-actions" id="nav-actions"></div>
+        <button class="nav-hamburger"
+          id="nav-hamburger"><span></span><span></span><span></span></button>
       </div>
-      <div class="nav-actions" id="nav-actions"></div>
-      <button class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></button>
+    </nav>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="index.html" class="mobile-nav-link">Home</a>
+      <a href="products.html" class="mobile-nav-link">Shop</a>
     </div>
-  </nav>
-  <div class="mobile-menu" id="mobile-menu">
-    <a href="index.html" class="mobile-nav-link">Home</a>
-    <a href="products.html" class="mobile-nav-link">Shop</a>
-  </div>
 
-  <div class="auth-bg"></div>
+    <div class="auth-bg"></div>
 
-  <div class="auth-page">
-    <div class="auth-card">
-      <!-- Logo -->
-      <div class="auth-logo">
-        <img src="logo.png" alt="ZENTRA" class="auth-logo-img" />
-      </div>
-
-      <!-- Tabs -->
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tab-login-btn" onclick="showAuthTab('login')">Login</button>
-        <button class="auth-tab" id="tab-register-btn" onclick="showAuthTab('register')">Create Account</button>
-      </div>
-
-      <!-- Login Form -->
-      <div class="auth-form active" id="form-login">
-        <form onsubmit="handleLogin(event)">
-          <div class="form-group">
-            <label class="form-label" for="login-email">Username / Email Address <span class="required">*</span></label>
-            <input class="form-input" id="login-email" type="text" placeholder="Enter your Email"
-              autocomplete="username" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="login-password">Password <span class="required">*</span></label>
-            <div class="password-group">
-              <input class="form-input" id="login-password" type="password" placeholder="••••••••"
-                autocomplete="current-password" required />
-              <button type="button" class="password-toggle"
-                onclick="togglePassword('login-password', this)">👁️</button>
-            </div>
-          </div>
-          <div id="login-error" class="form-error" style="display:none;margin-bottom:1rem"></div>
-          <button type="submit" class="btn btn-primary w-full btn-lg" id="login-btn">Sign In →</button>
-        </form>
-
-        <div class="auth-footer-text">
-          Don't have an account? <a href="#" onclick="showAuthTab('register'); return false;">Sign up for free</a>
+    <div class="auth-page">
+      <div class="auth-card">
+        <!-- Logo -->
+        <div class="auth-logo">
+          <img src="logo.png" alt="ZENTRA" class="auth-logo-img" />
         </div>
 
-        <!-- <div class="admin-hint">
+        <!-- Tabs -->
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tab-login-btn"
+            onclick="showAuthTab('login')">Login</button>
+          <button class="auth-tab" id="tab-register-btn"
+            onclick="showAuthTab('register')">Create Account</button>
+        </div>
+
+        <!-- Login Form -->
+        <div class="auth-form active" id="form-login">
+          <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+              <label class="form-label" for="login-email">Username / Email
+                Address <span class="required">*</span></label>
+              <input class="form-input" id="login-email" type="text"
+                placeholder="Enter your Email"
+                autocomplete="username" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="login-password">Password <span
+                  class="required">*</span></label>
+              <div class="password-group">
+                <input class="form-input" id="login-password" type="password"
+                  placeholder="••••••••"
+                  autocomplete="current-password" required />
+                <button type="button" class="password-toggle"
+                  onclick="togglePassword('login-password', this)">👁️</button>
+              </div>
+            </div>
+            <div id="login-error" class="form-error"
+              style="display:none;margin-bottom:1rem"></div>
+            <button type="submit" class="btn btn-primary w-full btn-lg"
+              id="login-btn">Sign In →</button>
+          </form>
+
+          <div class="auth-footer-text">
+            Don't have an account? <a href="#"
+              onclick="showAuthTab('register'); return false;">Sign up for
+              free</a>
+          </div>
+
+          <!-- <div class="admin-hint">
           <strong>🛡️ Admin Access</strong>
           Username: <code>Zantac.in</code> | Password: <code>jabarchand$123</code>
         </div> -->
-      </div>
+        </div>
 
-      <!-- Register Form -->
-      <div class="auth-form" id="form-register">
-        <form onsubmit="handleRegister(event)">
-          <div class="form-group">
-            <label class="form-label" for="reg-name">Full Name <span class="required">*</span></label>
-            <input class="form-input" id="reg-name" type="text" placeholder="Your full name" autocomplete="name"
-              required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="reg-email">Email Address <span class="required">*</span></label>
-            <input class="form-input" id="reg-email" type="email" placeholder="you@example.com" autocomplete="email"
-              required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="reg-phone">Mobile Number <span class="required">*</span></label>
-            <input class="form-input" id="reg-phone" type="tel" placeholder="10-digit mobile number" autocomplete="tel"
-              required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="reg-password">Password <span class="required">*</span></label>
-            <div class="password-group">
-              <input class="form-input" id="reg-password" type="password" placeholder="Min. 6 characters"
-                autocomplete="new-password" required />
-              <button type="button" class="password-toggle" onclick="togglePassword('reg-password', this)">👁️</button>
+        <!-- Register Form -->
+        <div class="auth-form" id="form-register">
+          <form onsubmit="handleRegister(event)">
+            <div class="form-group">
+              <label class="form-label" for="reg-name">Full Name <span
+                  class="required">*</span></label>
+              <input class="form-input" id="reg-name" type="text"
+                placeholder="Your full name" autocomplete="name"
+                required />
             </div>
-            <span class="form-hint">At least 6 characters.</span>
-          </div>
-          <div id="register-error" class="form-error" style="display:none;margin-bottom:1rem"></div>
-          <button type="submit" class="btn btn-primary w-full btn-lg" id="register-btn">Create Account →</button>
-        </form>
+            <div class="form-group">
+              <label class="form-label" for="reg-email">Email Address <span
+                  class="required">*</span></label>
+              <input class="form-input" id="reg-email" type="email"
+                placeholder="you@example.com" autocomplete="email"
+                required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-phone">Mobile Number <span
+                  class="required">*</span></label>
+              <input class="form-input" id="reg-phone" type="tel"
+                placeholder="10-digit mobile number" autocomplete="tel"
+                required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-password">Password <span
+                  class="required">*</span></label>
+              <div class="password-group">
+                <input class="form-input" id="reg-password" type="password"
+                  placeholder="Min. 6 characters"
+                  autocomplete="new-password" required />
+                <button type="button" class="password-toggle"
+                  onclick="togglePassword('reg-password', this)">👁️</button>
+              </div>
+              <span class="form-hint">At least 6 characters.</span>
+            </div>
+            <div id="register-error" class="form-error"
+              style="display:none;margin-bottom:1rem"></div>
+            <button type="submit" class="btn btn-primary w-full btn-lg"
+              id="register-btn">Create Account →</button>
+          </form>
 
-        <div class="auth-footer-text">
-          Already have an account? <a href="#" onclick="showAuthTab('login'); return false;">Sign in</a>
+          <div class="auth-footer-text">
+            Already have an account? <a href="#"
+              onclick="showAuthTab('login'); return false;">Sign in</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div id="toast-container"></div>
-  <script src="js/config.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/preloader.js"></script>
-  <script>
+    <div id="toast-container"></div>
+    <script src="js/config.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/preloader.js"></script>
+    <script>
     // Redirect if already logged in
     document.addEventListener('DOMContentLoaded', () => {
       const session = Auth.getSession();
@@ -374,8 +398,7 @@
 
       try {
         await new Promise((r) => setTimeout(r, 300));
-        const result = Auth.login(email, password);
-        btn.disabled = false;
+      const result = await Auth.login(email, password);
         btn.textContent = 'Sign In →';
 
         if (result.success) {
@@ -384,7 +407,7 @@
             window.location.href = result.user.role === 'admin' ? 'admin.html' : 'user-panel.html';
           }, 800);
         } else {
-          errorEl.textContent = '❌ ' + result.error;
+          errorEl.textContent = '❌ ' + (result.error || 'Invalid credentials or account not found.');
           errorEl.style.display = 'flex';
         }
       } catch (err) {
@@ -411,7 +434,7 @@
 
       await new Promise((r) => setTimeout(r, 400));
 
-      const result = Auth.register(name, email, phone, password);
+      const result = await Auth.register(name, email, phone, password);
       btn.disabled = false;
       btn.textContent = 'Create Account →';
 
@@ -419,11 +442,11 @@
         showToast('Account created! Please login now.', 'success');
         setTimeout(() => showAuthTab('login'), 600);
       } else {
-        errorEl.textContent = '❌ ' + result.error;
+        errorEl.textContent = '❌ ' + (result.error || 'Registration failed. Please try again.');
         errorEl.style.display = 'flex';
       }
     }
   </script>
-</body>
+  </body>
 
 </html>
