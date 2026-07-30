@@ -48,13 +48,21 @@ const Storage = {
     }
   },
 
+  _mapProductToBackend(p) {
+    return {
+      id: p.id, name: p.name, category: p.category, description: p.description, price: p.price,
+      original_price: p.originalPrice, stock: p.stock, trending: p.trending, new_arrival: p.newArrival,
+      images: p.images, tags: p.tags, sizes: p.sizes, created_at: p.createdAt, updated_at: p.updatedAt
+    };
+  },
+
   async _syncProductsToBackend(products) {
     try {
       if (!(await this.pingBackend())) return false;
       const res = await fetch(`${this.supabaseUrl}/rest/v1/products`, {
         method: "POST",
         headers: this._getSupabaseHeaders(),
-        body: JSON.stringify(products[0]),
+        body: JSON.stringify(this._mapProductToBackend(products[0])),
       });
       return res.ok;
     } catch (e) {
@@ -92,18 +100,33 @@ const Storage = {
     }
   },
 
+  _mapUserToBackend(u) {
+    return {
+      id: u.id, name: u.name, email: u.email, phone: u.phone, password: u.password,
+      created_at: u.createdAt, updated_at: u.updatedAt
+    };
+  },
+
   async _syncUserToBackend(user) {
     try {
       if (!(await this.pingBackend())) return false;
       const res = await fetch(`${this.supabaseUrl}/rest/v1/users`, {
         method: "POST",
         headers: this._getSupabaseHeaders(),
-        body: JSON.stringify(user),
+        body: JSON.stringify(this._mapUserToBackend(user)),
       });
       return res.ok;
     } catch (e) {
       return false;
     }
+  },
+
+  _mapRequestToBackend(r) {
+    return {
+      id: r.id, user_id: r.userId, user_name: r.userName, user_email: r.userEmail, user_phone: r.userPhone,
+      product_name: r.productName, description: r.description, size: r.size, quantity: r.quantity,
+      address: r.address, status: r.status, admin_notes: r.adminNotes, created_at: r.createdAt, updated_at: r.updatedAt
+    };
   },
 
   async _syncRequestToBackend(request) {
@@ -112,7 +135,7 @@ const Storage = {
       const res = await fetch(`${this.supabaseUrl}/rest/v1/requests`, {
         method: "POST",
         headers: this._getSupabaseHeaders(),
-        body: JSON.stringify(request),
+        body: JSON.stringify(this._mapRequestToBackend(request)),
       });
       return res.ok;
     } catch (e) {
@@ -126,7 +149,7 @@ const Storage = {
       const res = await fetch(`${this.supabaseUrl}/rest/v1/requests?id=eq.${request.id}`, {
         method: "PATCH",
         headers: this._getSupabaseHeaders(),
-        body: JSON.stringify(request),
+        body: JSON.stringify(this._mapRequestToBackend(request)),
       });
       return res.ok;
     } catch (e) {
@@ -302,7 +325,7 @@ const Storage = {
       const res = await fetch(`${this.supabaseUrl}/rest/v1/products?id=eq.${id}`, {
         method: "PATCH",
         headers: this._getSupabaseHeaders(),
-        body: JSON.stringify(products[i]),
+        body: JSON.stringify(this._mapProductToBackend(products[i])),
       });
       if (res.ok) {
         this._emitProductsChanged();
