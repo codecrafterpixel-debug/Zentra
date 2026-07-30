@@ -16,21 +16,29 @@ const Storage = {
   apiBaseUrl:
     (typeof window !== "undefined" && window.ZENTRA_CONFIG?.apiBaseUrl) ||
     "/api",
+  supabaseUrl: (typeof window !== "undefined" && window.ZENTRA_CONFIG?.supabaseUrl) || "",
+  supabaseKey: (typeof window !== "undefined" && window.ZENTRA_CONFIG?.supabaseKey) || "",
   backendEnabled: true,
 
+  _getSupabaseHeaders() {
+    return {
+      "Content-Type": "application/json",
+      "apikey": this.supabaseKey,
+      "Authorization": `Bearer ${this.supabaseKey}`,
+      "Prefer": "return=representation"
+    };
+  },
+
   async pingBackend() {
-    try {
-      const res = await fetch(`${this.apiBaseUrl}/health`);
-      return res.ok;
-    } catch (e) {
-      return false;
-    }
+    return !!(this.supabaseUrl && this.supabaseKey);
   },
 
   async _loadProductsFromBackend() {
     try {
       if (!(await this.pingBackend())) return null;
-      const res = await fetch(`${this.apiBaseUrl}/products`);
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/products?select=*`, {
+        headers: this._getSupabaseHeaders()
+      });
       if (!res.ok) return null;
       const data = await res.json();
       if (!Array.isArray(data)) return [];
@@ -43,9 +51,9 @@ const Storage = {
   async _syncProductsToBackend(products) {
     try {
       if (!(await this.pingBackend())) return false;
-      const res = await fetch(`${this.apiBaseUrl}/products`, {
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/products`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: this._getSupabaseHeaders(),
         body: JSON.stringify(products[0]),
       });
       return res.ok;
@@ -57,7 +65,9 @@ const Storage = {
   async _loadUsersFromBackend() {
     try {
       if (!(await this.pingBackend())) return null;
-      const res = await fetch(`${this.apiBaseUrl}/users`);
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/users?select=*`, {
+        headers: this._getSupabaseHeaders()
+      });
       if (!res.ok) return null;
       const data = await res.json();
       if (!Array.isArray(data)) return [];
@@ -70,7 +80,9 @@ const Storage = {
   async _loadRequestsFromBackend() {
     try {
       if (!(await this.pingBackend())) return null;
-      const res = await fetch(`${this.apiBaseUrl}/requests`);
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/requests?select=*`, {
+        headers: this._getSupabaseHeaders()
+      });
       if (!res.ok) return null;
       const data = await res.json();
       if (!Array.isArray(data)) return [];
@@ -83,9 +95,9 @@ const Storage = {
   async _syncUserToBackend(user) {
     try {
       if (!(await this.pingBackend())) return false;
-      const res = await fetch(`${this.apiBaseUrl}/users`, {
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/users`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: this._getSupabaseHeaders(),
         body: JSON.stringify(user),
       });
       return res.ok;
@@ -97,9 +109,9 @@ const Storage = {
   async _syncRequestToBackend(request) {
     try {
       if (!(await this.pingBackend())) return false;
-      const res = await fetch(`${this.apiBaseUrl}/requests`, {
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/requests`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: this._getSupabaseHeaders(),
         body: JSON.stringify(request),
       });
       return res.ok;
@@ -111,9 +123,9 @@ const Storage = {
   async _syncRequestUpdateToBackend(request) {
     try {
       if (!(await this.pingBackend())) return false;
-      const res = await fetch(`${this.apiBaseUrl}/requests`, {
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/requests?id=eq.${request.id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: this._getSupabaseHeaders(),
         body: JSON.stringify(request),
       });
       return res.ok;
@@ -287,9 +299,9 @@ const Storage = {
     this.saveProducts(products);
 
     try {
-      const res = await fetch(`${this.apiBaseUrl}/products/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/products?id=eq.${id}`, {
+        method: "PATCH",
+        headers: this._getSupabaseHeaders(),
         body: JSON.stringify(products[i]),
       });
       if (res.ok) {
@@ -313,8 +325,9 @@ const Storage = {
     this.saveProducts(filtered);
 
     try {
-      const res = await fetch(`${this.apiBaseUrl}/products/${id}`, {
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/products?id=eq.${id}`, {
         method: "DELETE",
+        headers: this._getSupabaseHeaders(),
       });
       if (res.ok) {
         this._emitProductsChanged();
