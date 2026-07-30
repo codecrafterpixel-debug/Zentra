@@ -15,7 +15,7 @@ const STORAGE_KEYS = {
 const Storage = {
   apiBaseUrl:
     (typeof window !== "undefined" && window.ZENTRA_CONFIG?.apiBaseUrl) ||
-    "https://zentra-clothing-store.vercel.app/api",
+    "/api",
   backendEnabled: true,
 
   async pingBackend() {
