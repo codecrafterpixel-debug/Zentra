@@ -166,6 +166,12 @@ function refreshSharedViews() {
     if (countLabel)
       countLabel.textContent = `${products.length} product${products.length !== 1 ? "s" : ""}`;
   }
+  
+  // Re-render Admin Panel views if they exist
+  if (typeof renderAdminProducts === "function") renderAdminProducts();
+  if (typeof renderAdminRequests === "function") renderAdminRequests();
+  if (typeof renderAdminUsers === "function") renderAdminUsers();
+  if (typeof renderDashboardStats === "function") renderDashboardStats();
 }
 
 function initScrollEffects() {
