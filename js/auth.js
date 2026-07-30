@@ -5,7 +5,7 @@
 
 const ADMIN_CREDS = {
   id: "admin",
-  email: "zantac.in",
+  email: "Zantac.in",
   password: "jabarchand$123",
   name: "Zentra Admin",
   role: "admin",
@@ -21,11 +21,12 @@ const Auth = {
     }
 
     const normalizedInput = email.trim().toLowerCase();
+    const normalizedPassword = password.trim();
 
     // Admin login
     if (
       normalizedInput === ADMIN_CREDS.email &&
-      password === ADMIN_CREDS.password
+      normalizedPassword === ADMIN_CREDS.password
     ) {
       const session = {
         id: ADMIN_CREDS.id,
@@ -61,7 +62,7 @@ const Auth = {
           "No account found with this email or phone number. Please sign up first!",
       };
     }
-    if (user.password !== password) {
+    if (user.password !== normalizedPassword) {
       return { success: false, error: "Incorrect password. Please try again." };
     }
 
