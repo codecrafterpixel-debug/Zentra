@@ -128,6 +128,11 @@ async function submitUserRequest(e) {
   // Show success state
   renderUserRequests();
   switchUserTab("history");
+
+  // Show delivery popup message
+  setTimeout(() => {
+    alert("Your product will be delivered in 2-3 working days.");
+  }, 500);
 }
 
 function showFormError(inputId, msg) {
@@ -214,4 +219,3 @@ function renderUserRequests() {
     )
     .join("");
 }
-
