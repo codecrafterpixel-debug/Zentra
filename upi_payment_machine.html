@@ -336,6 +336,31 @@
     margin-top:14px;
     letter-spacing:0.04em;
   }
+  
+  .stamp.paid {
+    color: #0F6E56;
+    border-color: #0F6E56;
+  }
+  
+  #confirmPaymentBtn {
+    background: #E08A1E;
+    color: #3A2205;
+  }
+  #confirmPaymentBtn:hover {
+    background: #EF9A34;
+  }
+  #printReceiptBtn {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .terminal, .pay-btn, .row-actions, #confirmPaymentBtn, #printReceiptBtn, .footer-note { display: none !important; }
+    .rig { display: block; }
+    .receipt-wrap { width: 100%; max-width: 400px; margin: 0 auto; }
+    .receipt { box-shadow: none; border: 1px solid #ddd; }
+  }
 </style>
 </head>
 <body>
@@ -414,6 +439,8 @@
 
         <div style="margin-top:16px;">
           <a class="pay-btn" id="payLink" href="#">Pay now on this phone</a>
+          <button class="pay-btn" id="confirmPaymentBtn">Mark as Paid</button>
+          <button class="pay-btn" id="printReceiptBtn" style="display:none;"><i class="ti ti-printer"></i> Print Receipt</button>
           <div class="row-actions">
             <button id="copyLinkBtn"><i class="ti ti-copy"></i>Copy link</button>
             <button id="downloadBtn"><i class="ti ti-download"></i>Save QR</button>
@@ -499,6 +526,22 @@
     return /^[\w.\-]{2,}@[a-zA-Z]{2,}$/.test(v.trim());
   }
 
+  const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+  const printReceiptBtn = document.getElementById('printReceiptBtn');
+  const stamp = document.querySelector('.stamp');
+  const qrBlock = document.querySelector('.qr-block');
+  const rowActions = document.querySelector('.row-actions');
+
+  function resetReceiptState() {
+    stamp.textContent = 'Awaiting payment';
+    stamp.className = 'stamp';
+    qrBlock.style.display = 'flex';
+    payLink.style.display = 'block';
+    confirmPaymentBtn.style.display = 'block';
+    printReceiptBtn.style.display = 'none';
+    rowActions.style.display = 'flex';
+  }
+
   generateBtn.addEventListener('click', function(){
     const vpa = vpaInput.value.trim();
     const name = nameInput.value.trim();
@@ -527,6 +570,8 @@
     rAmount.textContent = fmtInr(amount);
     rNote.textContent = note ? ('Note: ' + note) : '';
     payLink.href = link;
+    
+    resetReceiptState();
 
     receiptEmpty.style.display = 'none';
     receiptFilled.style.display = 'block';
@@ -540,6 +585,24 @@
       colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.M
     });
+  });
+
+  confirmPaymentBtn.addEventListener('click', function(){
+    stamp.textContent = 'PAID';
+    stamp.className = 'stamp paid';
+    qrBlock.style.display = 'none';
+    payLink.style.display = 'none';
+    confirmPaymentBtn.style.display = 'none';
+    rowActions.style.display = 'none';
+    printReceiptBtn.style.display = 'block';
+    
+    // Auto-generate transaction ID for visual effect
+    const txId = 'TXN' + Math.floor(Math.random() * 1000000000);
+    rNote.innerHTML = (rNote.textContent ? rNote.textContent + '<br>' : '') + 'Transaction ID: ' + txId;
+  });
+
+  printReceiptBtn.addEventListener('click', function(){
+    window.print();
   });
 
   copyLinkBtn.addEventListener('click', function(){
