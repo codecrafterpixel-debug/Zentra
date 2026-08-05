@@ -582,6 +582,10 @@
     return /^[\w.\-]{2,}@[a-zA-Z]{2,}$/.test(v.trim());
   }
 
+  const stamp = document.querySelector('.stamp');
+  const qrBlock = document.querySelector('.qr-block');
+  const rowActions = document.querySelector('.row-actions');
+
   function resetReceiptState() {
     stamp.textContent = 'Awaiting payment';
     stamp.className = 'stamp';
