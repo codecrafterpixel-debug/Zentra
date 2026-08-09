@@ -1,13 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>UPI payment machine</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
-<link rel="stylesheet" href="css/upi_payment_machine.responsive.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="index, follow">
+    <meta name="description"
+      content="Generate and share a ready-to-use UPI payment machine experience for ZENTRA payments.">
+    <link rel="canonical"
+      href="https://zentra-clothing-store.vercel.app/upi_payment_machine.html">
+    <meta property="og:title" content="UPI Payment Machine — ZENTRA">
+    <meta property="og:description"
+      content="Generate and share a ready-to-use UPI payment machine experience for ZENTRA payments.">
+    <meta property="og:type" content="website">
+    <meta property="og:url"
+      content="https://zentra-clothing-store.vercel.app/upi_payment_machine.html">
+    <meta property="og:image"
+      content="https://zentra-clothing-store.vercel.app/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="UPI Payment Machine — ZENTRA">
+    <meta name="twitter:description"
+      content="Generate and share a ready-to-use UPI payment machine experience for ZENTRA payments.">
+    <meta name="twitter:image"
+      content="https://zentra-clothing-store.vercel.app/logo.png">
+    <meta name="theme-color" content="#0d0d0d">
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link rel="apple-touch-icon" href="/logo.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>UPI payment machine</title>
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
+    <link rel="stylesheet" href="css/upi_payment_machine.responsive.css">
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap');
 
   :root{
@@ -351,160 +377,202 @@
     background: #EF9A34;
   }
 </style>
-</head>
-<body>
+  </head>
+  <body>
 
-<div class="rig">
+    <div class="rig">
 
-  <!-- TERMINAL -->
-  <div class="terminal">
-    <div class="terminal-head">
-      <span class="brand">UPI machine</span>
-      <div class="dot-row"><span></span><span></span><span></span></div>
-    </div>
+      <!-- TERMINAL -->
+      <div class="terminal">
+        <div class="terminal-head">
+          <span class="brand">UPI machine</span>
+          <div class="dot-row"><span></span><span></span><span></span></div>
+        </div>
 
-    <div class="screen">
-      <div class="label">Amount to collect</div>
-      <div class="amount" id="screenAmount">₹0</div>
-      <div class="sub" id="screenSub">Enter payee UPI ID to begin</div>
-    </div>
+        <div class="screen">
+          <div class="label">Amount to collect</div>
+          <div class="amount" id="screenAmount">₹0</div>
+          <div class="sub" id="screenSub">Enter payee UPI ID to begin</div>
+        </div>
 
-    <div class="field">
-      <label>Payee UPI ID (VPA)</label>
-      <input type="text" id="vpa" placeholder="shopname@okhdfcbank" autocomplete="off">
-    </div>
-    <div class="field">
-      <label>Payee name</label>
-      <input type="text" id="pname" placeholder="Ramesh General Store" autocomplete="off">
-    </div>
-    <div class="field amount-field">
-      <label>Amount (INR)</label>
-      <input type="number" id="amount" placeholder="0" min="1" step="1" inputmode="decimal">
-    </div>
+        <div class="field">
+          <label>Payee UPI ID (VPA)</label>
+          <input type="text" id="vpa" placeholder="shopname@okhdfcbank"
+            autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Payee name</label>
+          <input type="text" id="pname" placeholder="Ramesh General Store"
+            autocomplete="off">
+        </div>
+        <div class="field amount-field">
+          <label>Amount (INR)</label>
+          <input type="number" id="amount" placeholder="0" min="1" step="1"
+            inputmode="decimal">
+        </div>
 
-    <div class="keypad" id="keypad">
-      <button data-v="100">+100</button>
-      <button data-v="500">+500</button>
-      <button data-v="1000">+1000</button>
-      <button data-v="50">+50</button>
-      <button data-v="20">+20</button>
-      <button class="clear" data-v="clear">Clear</button>
-    </div>
+        <div class="keypad" id="keypad">
+          <button data-v="100">+100</button>
+          <button data-v="500">+500</button>
+          <button data-v="1000">+1000</button>
+          <button data-v="50">+50</button>
+          <button data-v="20">+20</button>
+          <button class="clear" data-v="clear">Clear</button>
+        </div>
 
-    <div class="field">
-      <label>Note (optional)</label>
-      <input type="text" id="note" placeholder="Invoice #, table no., etc." autocomplete="off">
-    </div>
+        <div class="field">
+          <label>Note (optional)</label>
+          <input type="text" id="note" placeholder="Invoice #, table no., etc."
+            autocomplete="off">
+        </div>
 
-    <button class="generate-btn" id="generateBtn">Generate QR and link</button>
-    <div class="hint">Works with any UPI app — GPay, PhonePe, Paytm, BHIM. No account or backend needed; the link is a standard UPI deep link built in your browser.</div>
-  </div>
-
-  <!-- RECEIPT -->
-  <div class="receipt-wrap">
-    <div class="receipt">
-      <div id="receiptEmpty" class="placeholder-state">
-        <i class="ti ti-qrcode"></i>
-        Fill in the terminal on the left and generate a QR to collect a payment.
+        <button class="generate-btn" id="generateBtn">Generate QR and
+          link</button>
+        <div class="hint">Works with any UPI app — GPay, PhonePe, Paytm, BHIM.
+          No account or backend needed; the link is a standard UPI deep link
+          built in your browser.</div>
       </div>
 
-      <div id="receiptFilled" style="display:none;">
-        <div class="stamp">Awaiting payment</div>
-        <div class="receipt-top">
-          <span class="tag">Pay via UPI</span>
-          <div class="flag"><span class="a"></span><span class="b"></span><span class="c"></span></div>
+      <!-- RECEIPT -->
+      <div class="receipt-wrap">
+        <div class="receipt">
+          <div id="receiptEmpty" class="placeholder-state">
+            <i class="ti ti-qrcode"></i>
+            Fill in the terminal on the left and generate a QR to collect a
+            payment.
+          </div>
+
+          <div id="receiptFilled" style="display:none;">
+            <div class="stamp">Awaiting payment</div>
+            <div class="receipt-top">
+              <span class="tag">Pay via UPI</span>
+              <div class="flag"><span class="a"></span><span
+                  class="b"></span><span class="c"></span></div>
+            </div>
+            <div class="payee-name" id="rName">—</div>
+            <div class="payee-vpa" id="rVpa">—</div>
+
+            <div class="perf"></div>
+
+            <div class="qr-block"><div id="qrcode"></div></div>
+
+            <div class="receipt-amount"><span class="rs"
+                id="rAmount">₹0</span></div>
+            <div class="receipt-note" id="rNote"></div>
+
+            <div class="perf"></div>
+
+            <div style="margin-top:16px;">
+              <a class="pay-btn" id="payLink" href="#">Pay now on this phone</a>
+              <button class="pay-btn" id="confirmPaymentBtn">Confirm Payment
+                Done</button>
+              <div class="row-actions">
+                <button id="copyLinkBtn"><i class="ti ti-copy"></i>Copy
+                  link</button>
+                <button id="downloadBtn"><i class="ti ti-download"></i>Save
+                  QR</button>
+              </div>
+            </div>
+
+            <div class="footer-note">Scan · tap · pay — settles directly to the
+              VPA above</div>
+          </div>
         </div>
-        <div class="payee-name" id="rName">—</div>
-        <div class="payee-vpa" id="rVpa">—</div>
+      </div>
 
-        <div class="perf"></div>
+    </div>
 
-        <div class="qr-block"><div id="qrcode"></div></div>
-
-        <div class="receipt-amount"><span class="rs" id="rAmount">₹0</span></div>
-        <div class="receipt-note" id="rNote"></div>
-
-        <div class="perf"></div>
-
-        <div style="margin-top:16px;">
-          <a class="pay-btn" id="payLink" href="#">Pay now on this phone</a>
-          <button class="pay-btn" id="confirmPaymentBtn">Confirm Payment Done</button>
-          <div class="row-actions">
-            <button id="copyLinkBtn"><i class="ti ti-copy"></i>Copy link</button>
-            <button id="downloadBtn"><i class="ti ti-download"></i>Save QR</button>
+    <!-- HIDDEN A4 RECEIPT TEMPLATE (FOR PDF GENERATION) -->
+    <div id="receipt-invoice" style="display:none;">
+      <div id="invoice-content"
+        style="width: 800px; padding: 0; font-family: 'Inter', sans-serif; background: white; color: #111;">
+        <!-- Gray header -->
+        <div
+          style="background-color: #EBEBEB; padding: 40px; display: flex; justify-content: space-between; align-items: center;">
+          <div
+            style="border: 2px solid #333; padding: 10px 15px; font-weight: bold; font-size: 26px; letter-spacing: 2px;">
+            ZENTRA
+          </div>
+          <div
+            style="text-align: right; font-size: 14px; color: #444; line-height: 1.5;">
+            support@zentra.com<br>
+            https://zentra-clothing-store.vercel.app/ | +91 96627 81902
           </div>
         </div>
 
-        <div class="footer-note">Scan · tap · pay — settles directly to the VPA above</div>
+        <div style="padding: 50px;">
+          <h1
+            style="text-align: center; font-size: 32px; font-weight: 700; margin-bottom: 50px; color: #222;">Payment
+            Receipt</h1>
+
+          <div style="margin-bottom: 40px; font-size: 15px; color: #333;">
+            <p style="margin: 6px 0;">Receipt No: &nbsp;&nbsp;<strong
+                id="inv-receipt-no">---</strong></p>
+            <p style="margin: 6px 0;">Date:
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong
+                id="inv-date">---</strong></p>
+          </div>
+
+          <table
+            style="width: 100%; border-collapse: collapse; margin-bottom: 50px;">
+            <thead>
+              <tr>
+                <th
+                  style="background-color: #F5F5F5; border: 1px solid #ddd; padding: 16px; text-align: left; width: 45%; color: #666; font-weight: 600; font-size: 15px;">Details</th>
+                <th
+                  style="background-color: #F5F5F5; border: 1px solid #ddd; padding: 16px; text-align: left; width: 55%; color: #666; font-weight: 600; font-size: 15px;">Information</th>
+              </tr>
+            </thead>
+            <tbody style="font-size: 15px; color: #222;">
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 16px;">Received
+                  From</td>
+                <td
+                  style="border: 1px solid #ddd; padding: 16px; font-weight: 600;"
+                  id="inv-customer">---</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 16px;">Amount
+                  Paid</td>
+                <td
+                  style="border: 1px solid #ddd; padding: 16px; font-weight: 600;"
+                  id="inv-amount">---</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 16px;">Payment
+                  Method</td>
+                <td
+                  style="border: 1px solid #ddd; padding: 16px; font-weight: 600;">UPI</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 16px;">Description
+                  of Goods/Services</td>
+                <td
+                  style="border: 1px solid #ddd; padding: 16px; font-weight: 600;"
+                  id="inv-desc">---</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="border-top: 1px solid #eee; margin-bottom: 30px;"></div>
+
+          <p style="font-size: 15px; margin: 6px 0; color: #333;">Issued by:
+            <strong style="color:#000;">ZENTRA CLOTHING</strong></p>
+          <p
+            style="font-size: 15px; font-style: italic; margin-top: 25px; color: #555;">Thank
+            you for your payment!</p>
+
+          <div
+            style="text-align: center; margin-top: 80px; font-size: 13px; color: #0F6E56; font-weight: 500;">
+            Receipt automatically generated by Zentra Payment Gateway
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-</div>
-
-<!-- HIDDEN A4 RECEIPT TEMPLATE (FOR PDF GENERATION) -->
-<div id="receipt-invoice" style="display:none;">
-  <div id="invoice-content" style="width: 800px; padding: 0; font-family: 'Inter', sans-serif; background: white; color: #111;">
-    <!-- Gray header -->
-    <div style="background-color: #EBEBEB; padding: 40px; display: flex; justify-content: space-between; align-items: center;">
-      <div style="border: 2px solid #333; padding: 10px 15px; font-weight: bold; font-size: 26px; letter-spacing: 2px;">
-        ZENTRA
-      </div>
-      <div style="text-align: right; font-size: 14px; color: #444; line-height: 1.5;">
-        support@zentra.com<br>
-        https://zentra-clothing-store.vercel.app/ | +91 96627 81902
-      </div>
-    </div>
-    
-    <div style="padding: 50px;">
-      <h1 style="text-align: center; font-size: 32px; font-weight: 700; margin-bottom: 50px; color: #222;">Payment Receipt</h1>
-      
-      <div style="margin-bottom: 40px; font-size: 15px; color: #333;">
-        <p style="margin: 6px 0;">Receipt No: &nbsp;&nbsp;<strong id="inv-receipt-no">---</strong></p>
-        <p style="margin: 6px 0;">Date: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong id="inv-date">---</strong></p>
-      </div>
-      
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 50px;">
-        <thead>
-          <tr>
-            <th style="background-color: #F5F5F5; border: 1px solid #ddd; padding: 16px; text-align: left; width: 45%; color: #666; font-weight: 600; font-size: 15px;">Details</th>
-            <th style="background-color: #F5F5F5; border: 1px solid #ddd; padding: 16px; text-align: left; width: 55%; color: #666; font-weight: 600; font-size: 15px;">Information</th>
-          </tr>
-        </thead>
-        <tbody style="font-size: 15px; color: #222;">
-          <tr>
-            <td style="border: 1px solid #ddd; padding: 16px;">Received From</td>
-            <td style="border: 1px solid #ddd; padding: 16px; font-weight: 600;" id="inv-customer">---</td>
-          </tr>
-          <tr>
-            <td style="border: 1px solid #ddd; padding: 16px;">Amount Paid</td>
-            <td style="border: 1px solid #ddd; padding: 16px; font-weight: 600;" id="inv-amount">---</td>
-          </tr>
-          <tr>
-            <td style="border: 1px solid #ddd; padding: 16px;">Payment Method</td>
-            <td style="border: 1px solid #ddd; padding: 16px; font-weight: 600;">UPI</td>
-          </tr>
-          <tr>
-            <td style="border: 1px solid #ddd; padding: 16px;">Description of Goods/Services</td>
-            <td style="border: 1px solid #ddd; padding: 16px; font-weight: 600;" id="inv-desc">---</td>
-          </tr>
-        </tbody>
-      </table>
-      
-      <div style="border-top: 1px solid #eee; margin-bottom: 30px;"></div>
-      
-      <p style="font-size: 15px; margin: 6px 0; color: #333;">Issued by: <strong style="color:#000;">ZENTRA CLOTHING</strong></p>
-      <p style="font-size: 15px; font-style: italic; margin-top: 25px; color: #555;">Thank you for your payment!</p>
-      
-      <div style="text-align: center; margin-top: 80px; font-size: 13px; color: #0F6E56; font-weight: 500;">
-        Receipt automatically generated by Zentra Payment Gateway
-      </div>
-    </div>
-  </div>
-</div>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/iconfont/tabler-icons.min.css">
-<script>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/iconfont/tabler-icons.min.css">
+    <script>
 (function(){
   const vpaInput = document.getElementById('vpa');
   const nameInput = document.getElementById('pname');
@@ -725,5 +793,5 @@
 })();
 </script>
 
-</body>
+  </body>
 </html>
