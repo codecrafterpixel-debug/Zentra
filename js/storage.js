@@ -94,15 +94,15 @@ const Storage = {
 
   async _loadRequestsFromBackend() {
     try {
-      if (!(await this.pingBackend())) return null;
-      const res = await fetch(`${this.supabaseUrl}/rest/v1/requests?select=*`, {
-        headers: this._getSupabaseHeaders()
+      const res = await fetch(`${this.apiBaseUrl}/requests`, {
+        headers: { "Content-Type": "application/json" }
       });
       if (!res.ok) return null;
       const data = await res.json();
       if (!Array.isArray(data)) return [];
       return data.map((item) => this._normalizeRequest(item));
     } catch (e) {
+      console.warn("Storage._loadRequestsFromBackend error:", e);
       return null;
     }
   },
@@ -128,24 +128,27 @@ const Storage = {
     }
   },
 
-  _mapRequestToBackend(r) {
-    return {
-      id: r.id, user_id: r.userId, user_name: r.userName, user_email: r.userEmail, user_phone: r.userPhone,
-      product_name: r.productName, description: r.description, size: r.size, quantity: r.quantity,
-      address: r.address, status: r.status, admin_notes: r.adminNotes, created_at: r.createdAt, updated_at: r.updatedAt
-    };
-  },
-
   async _syncRequestToBackend(request) {
     try {
-      if (!(await this.pingBackend())) {
-        console.warn("Storage._syncRequestToBackend: backend not configured, skipping sync.");
-        return false;
-      }
-      const res = await fetch(`${this.supabaseUrl}/rest/v1/requests`, {
+      const res = await fetch(`${this.apiBaseUrl}/requests`, {
         method: "POST",
-        headers: this._getSupabaseHeaders(),
-        body: JSON.stringify(this._mapRequestToBackend(request)),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: request.id,
+          userId: request.userId,
+          userName: request.userName,
+          userEmail: request.userEmail,
+          userPhone: request.userPhone,
+          productName: request.productName,
+          description: request.description,
+          size: request.size,
+          quantity: request.quantity,
+          address: request.address,
+          status: request.status,
+          adminNotes: request.adminNotes,
+          createdAt: request.createdAt,
+          updatedAt: request.updatedAt,
+        }),
       });
       if (!res.ok) {
         const errText = await res.text().catch(() => "");
@@ -160,14 +163,23 @@ const Storage = {
 
   async _syncRequestUpdateToBackend(request) {
     try {
-      if (!(await this.pingBackend())) return false;
-      const res = await fetch(`${this.supabaseUrl}/rest/v1/requests?id=eq.${request.id}`, {
+      const res = await fetch(`${this.apiBaseUrl}/requests`, {
         method: "PATCH",
-        headers: this._getSupabaseHeaders(),
-        body: JSON.stringify(this._mapRequestToBackend(request)),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: request.id,
+          status: request.status,
+          adminNotes: request.adminNotes,
+          updatedAt: request.updatedAt,
+        }),
       });
+      if (!res.ok) {
+        const errText = await res.text().catch(() => "");
+        console.error("Storage._syncRequestUpdateToBackend failed:", res.status, errText);
+      }
       return res.ok;
     } catch (e) {
+      console.error("Storage._syncRequestUpdateToBackend error:", e);
       return false;
     }
   },
