@@ -103,7 +103,55 @@ const handler = async (req, res) => {
     }
   }
 
-  res.setHeader("Allow", "GET, POST, PUT, DELETE");
+  if (resource === "requests") {
+    if (req.method === "GET") {
+      const { data, error } = await supabase
+        .from("requests")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) return res.status(500).json({ error: error.message || error });
+      return res.status(200).json(data || []);
+    }
+
+    if (req.method === "POST") {
+      const payload = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
+      if (!payload.userId || !payload.userName || !payload.productName || !payload.address) {
+        return res.status(400).json({ error: "missing required fields" });
+      }
+      const request = {
+        id: payload.id || crypto.randomBytes(8).toString("hex"),
+        userId: payload.userId,
+        userName: payload.userName,
+        userEmail: payload.userEmail || "",
+        userPhone: payload.userPhone || "",
+        productName: payload.productName,
+        description: payload.description || "",
+        size: payload.size || "",
+        quantity: Number(payload.quantity || 1),
+        address: payload.address,
+        status: payload.status || "pending",
+        adminNotes: payload.adminNotes || "",
+        created_at: Number(payload.createdAt || Date.now()),
+        updated_at: Number(payload.updatedAt || Date.now()),
+      };
+      const { error } = await supabase.from("requests").insert(request);
+      if (error) return res.status(500).json({ error: error.message || error });
+      return res.status(200).json({ ok: true, request });
+    }
+
+    if (req.method === "PATCH") {
+      const payload = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
+      if (!payload.id) return res.status(400).json({ error: "missing request id" });
+      const updates = { updated_at: Number(payload.updatedAt || Date.now()) };
+      if ("status" in payload) updates.status = payload.status;
+      if ("adminNotes" in payload) updates.adminNotes = payload.adminNotes;
+      const { error } = await supabase.from("requests").update(updates).eq("id", payload.id);
+      if (error) return res.status(500).json({ error: error.message || error });
+      return res.status(200).json({ ok: true });
+    }
+  }
+
+  res.setHeader("Allow", "GET, POST, PUT, DELETE, PATCH");
   return res.status(405).json({ error: "Method not allowed" });
 };
 
