@@ -38,7 +38,79 @@ const Storage = {
     return !!(this.supabaseUrl && this.supabaseKey);
   },
 
-  // ... (rest of the file stays the same, only the request methods changed)
+  async _loadProductsFromBackend() {
+    try {
+      if (!(await this.pingBackend())) return null;
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/products?select=*`, {
+        headers: this._getSupabaseHeaders()
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!Array.isArray(data)) return [];
+      return data.map((item) => this._normalizeProduct(item));
+    } catch (e) {
+      return null;
+    }
+  },
+
+  _mapProductToBackend(p) {
+    return {
+      id: p.id, name: p.name, category: p.category, description: p.description, price: p.price,
+      original_price: p.originalPrice, stock: p.stock, trending: p.trending, new_arrival: p.newArrival,
+      images: p.images, tags: p.tags, sizes: p.sizes, created_at: p.createdAt, updated_at: p.updatedAt
+    };
+  },
+
+  async _syncProductsToBackend(products) {
+    try {
+      if (!(await this.pingBackend())) return false;
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/products`, {
+        method: "POST",
+        headers: this._getSupabaseHeaders(),
+        body: JSON.stringify(this._mapProductToBackend(products[0])),
+      });
+      return res.ok;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  async _loadUsersFromBackend() {
+    try {
+      if (!(await this.pingBackend())) return null;
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/users?select=*`, {
+        headers: this._getSupabaseHeaders()
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!Array.isArray(data)) return [];
+      return data.map((item) => this._normalizeUser(item));
+    } catch (e) {
+      return null;
+    }
+  },
+
+  _mapUserToBackend(u) {
+    return {
+      id: u.id, name: u.name, email: u.email, phone: u.phone, password: u.password,
+      created_at: u.createdAt, updated_at: u.updatedAt
+    };
+  },
+
+  async _syncUserToBackend(user) {
+    try {
+      if (!(await this.pingBackend())) return false;
+      const res = await fetch(`${this.supabaseUrl}/rest/v1/users`, {
+        method: "POST",
+        headers: this._getSupabaseHeaders(),
+        body: JSON.stringify(this._mapUserToBackend(user)),
+      });
+      return res.ok;
+    } catch (e) {
+      return false;
+    }
+  },
+
 
   async _loadRequestsFromBackend() {
     try {
