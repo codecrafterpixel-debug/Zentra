@@ -411,6 +411,7 @@ async function updateRequestStatus(requestId, newStatus) {
     showToast("Unable to update request status.", "error");
   }
   renderDashboardStats();
+  renderAdminRequests();
 }
 
 // ── Users List ────────────────────────────────────────────────────────────
