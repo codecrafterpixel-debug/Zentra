@@ -13,12 +13,19 @@ const STORAGE_KEYS = {
 };
 
 const Storage = {
-  apiBaseUrl:
-    (typeof window !== "undefined" && window.ZENTRA_CONFIG?.apiBaseUrl) ||
-    "/api",
-  supabaseUrl: (typeof window !== "undefined" && window.ZENTRA_CONFIG?.supabaseUrl) || "",
-  supabaseKey: (typeof window !== "undefined" && window.ZENTRA_CONFIG?.supabaseKey) || "",
   backendEnabled: true,
+
+  // Lazy getters — read config at call-time, not at object-definition time.
+  // This ensures config.js is already loaded when these are first accessed.
+  get apiBaseUrl() {
+    return window.ZENTRA_CONFIG?.apiBaseUrl || "/api";
+  },
+  get supabaseUrl() {
+    return window.ZENTRA_CONFIG?.supabaseUrl || "";
+  },
+  get supabaseKey() {
+    return window.ZENTRA_CONFIG?.supabaseKey || "";
+  },
 
   _getSupabaseHeaders() {
     return {
@@ -131,14 +138,22 @@ const Storage = {
 
   async _syncRequestToBackend(request) {
     try {
-      if (!(await this.pingBackend())) return false;
+      if (!(await this.pingBackend())) {
+        console.warn("Storage._syncRequestToBackend: backend not configured, skipping sync.");
+        return false;
+      }
       const res = await fetch(`${this.supabaseUrl}/rest/v1/requests`, {
         method: "POST",
         headers: this._getSupabaseHeaders(),
         body: JSON.stringify(this._mapRequestToBackend(request)),
       });
+      if (!res.ok) {
+        const errText = await res.text().catch(() => "");
+        console.error("Storage._syncRequestToBackend failed:", res.status, errText);
+      }
       return res.ok;
     } catch (e) {
+      console.error("Storage._syncRequestToBackend error:", e);
       return false;
     }
   },
