@@ -676,3 +676,4 @@ const Storage = {
     this.set(STORAGE_KEYS.SEEDED, true);
   },
 };
+ 
