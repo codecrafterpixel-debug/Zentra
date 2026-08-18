@@ -1,6 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
 
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+      content="ZENTRA — Premium graphic and oversized t-shirts. Bold prints, breathable cotton, fast all-India delivery. Wear The Standard." />
+    <meta name="keywords"
+      content="zentra, t-shirts, graphic tees, oversized tees, streetwear, custom print, Ahmedabad" />
+    <meta name="robots" content="index, follow" />
+    <meta name="description"
+      content="ZENTRA - Wear The Standard. Premium unisex clothing brand in Ahmedabad." />
+    <link rel="canonical" href="https://zentra-clothing-store.vercel.app/" />
+    <meta property="og:title" content="ZENTRA — Wear The Standard" />
+    <meta property="og:description"
+      content="Premium graphic and oversized t-shirts with bold prints and breathable cotton." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url"
+      content="https://zentra-clothing-store.vercel.app/" />
+    <meta property="og:image"
+      content="https://zentra-clothing-store.vercel.app/logo.png" />
+    <meta property="og:site_name" content="ZENTRA Clothing Brand" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ZENTRA — Wear The Standard" />
+    <meta name="twitter:description"
+      content="Premium graphic and oversized t-shirts with bold prints and breathable cotton." />
+    <meta name="twitter:image"
+      content="https://zentra-clothing-store.vercel.app/logo.png" />
+    <meta name="theme-color" content="#c8a96e" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <title>Return Policy | ZENTRA</title>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["Organization", "Store"],
+      "name": "ZENTRA Clothing Brand",
+      "url": "https://zentra-clothing-store.vercel.app/",
+      "logo": "https://zentra-clothing-store.vercel.app/logo.png",
+      "description": "Premium graphic and oversized t-shirts with bold prints and breathable cotton.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ahmedabad",
+        "addressCountry": "IN"
+      },
+      "sameAs": [
+        "https://www.instagram.com/",
+        "https://www.facebook.com/"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ZENTRA Clothing Brand",
+      "url": "https://zentra-clothing-store.vercel.app/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://zentra-clothing-store.vercel.app/products.html?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/preloader.css" />
+    <!-- Google tag (gtag.js) -->
+    <script async
+      src="https://www.googletagmanager.com/gtag/js?id=G-1C7DJT274E"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1C7DJT274E');
+    </script>
+    <meta name="google-site-verification" content="NaYjwsEtXSqF3NrddjD9MH5ku8ZZ9y_Ojt_5-_UGXfQ" />
+    <style>
+    /* ── Hero ─────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 8rem 1.5rem 4rem;
+    }
 
-    <section class="section" style="padding-top: 120px; min-height: 80vh;">
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: blobFloat 8s ease-in-out infinite;
+    }
+
+    .hero-blob-1 {
+      width: 500px;
+      height: 500px;
+      top: -100px;
+      left: -100px;
+      background: radial-gradient(circle, rgba(200, 169, 110, 0.12) 0%, transparent 70%);
+      animation-delay: 0s;
+    }
+
+    .hero-blob-2 {
+      width: 400px;
+      height: 400px;
+      bottom: -80px;
+      right: -80px;
+      background: radial-gradient(circle, rgba(200, 169, 110, 0.08) 0%, transparent 70%);
+      animation-delay: 3s;
+    }
+
+    .hero-blob-3 {
+      width: 300px;
+      height: 300px;
+      top: 40%;
+      left: 60%;
+      background: radial-gradient(circle, rgba(150, 80, 200, 0.06) 0%, transparent 70%);
+      animation-delay: 6s;
+    }
+
+    .hero-noise {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .hero-grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200, 169, 110, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200, 169, 110, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1.2rem;
+      background: var(--accent-glow);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 2rem;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(6rem, 18vw, 16rem);
+      line-height: 0.85;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+      /* display: block; */
+    }
+
+    .hero-tagline {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(0.9rem, 2vw, 1.25rem);
+      font-weight: 300;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      z-index: 1;
+    }
+
+    .hero-scroll-text {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .hero-scroll-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: scrollIndicator 1.5s ease-in-out infinite;
+    }
+
+    /* ── Stats Bar ───────────────────────────────────── */
+    .stats-bar {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 0;
+    }
+
+    .stats-bar-inner {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--accent);
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ── Trending ─────────────────────────────────────── */
+    .trending-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      gap: 1rem;
+    }
+
+    /* ── Custom Banner ───────────────────────────────── */
+    .custom-banner {
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-xl);
+      padding: 4rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .custom-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 100% 50%, var(--accent-glow) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .custom-banner-emoji {
+      font-size: 5rem;
+      display: block;
+      margin-bottom: 1rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @media (max-width: 768px) {
+      .custom-banner {
+        grid-template-columns: 1fr;
+        padding: 2.5rem 1.5rem;
+      }
+
+      .stats-bar-inner {
+        gap: 2rem;
+      }
+
+      .hero-title {
+        font-size: clamp(5rem, 22vw, 8rem);
+      }
+    }
+
+    @media (max-width: 375px) {
+      .hero {
+        padding: 6rem 0.75rem 3rem;
+      }
+
+      .hero-title {
+        font-size: clamp(3.5rem, 20vw, 5.5rem);
+      }
+
+      .hero-tagline {
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+      }
+
+      .hero-desc {
+        font-size: 0.875rem;
+      }
+
+      .hero-btns {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-eyebrow {
+        font-size: 0.68rem;
+        padding: 0.35rem 0.9rem;
+      }
+
+      .custom-banner {
+        padding: 2rem 1rem;
+        grid-template-columns: 1fr;
+      }
+
+      .custom-banner-emoji {
+        font-size: 3.5rem;
+      }
+
+      .stats-bar-inner {
+        gap: 1rem;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+      }
+
+      .stat-label {
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+    <link rel="stylesheet" href="css/policies.css" />
+  </head>
+
+  <body>
+
+    <!-- ── Preloader ──────────────────────────────────────────────── -->
+    <div id="preloader">
+      <div class="preloader-inner">
+        <div class="preloader-glow">
+          <img src="logo.png" alt="ZENTRA" class="preloader-logo" />
+        </div>
+        <div class="preloader-brand">ZENTRA</div>
+        <div class="preloader-tagline">Wear The Standard</div>
+        <div class="preloader-bar-wrap">
+          <div class="preloader-bar-fill"></div>
+        </div>
+        <div class="preloader-dots">
+          <span class="preloader-dot"></span>
+          <span class="preloader-dot"></span>
+          <span class="preloader-dot"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Navbar ─────────────────────────────────────────────────────────── -->
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+          <img src="logo.png" alt="ZENTRA" class="nav-logo-img" />
+        </a>
+
+        <div class="nav-links">
+          <a href="index.html" class="nav-link active">Home</a>
+          <a href="products.html" class="nav-link">Shop</a>
+          <a href="index.html#about" class="nav-link">About</a>
+          <a href="index.html#custom" class="nav-link">Custom</a>
+        </div>
+
+        <div class="nav-actions" id="nav-actions"></div>
+
+        <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="index.html" class="mobile-nav-link">Home</a>
+      <a href="products.html" class="mobile-nav-link">Shop</a>
+      <a href="index.html#about" class="mobile-nav-link">About</a>
+      <a href="index.html#custom" class="mobile-nav-link">Custom</a>
+    </div>
+
+    <!-- ── Hero ──────────────────────────────────────────────────────────── -->
+<section class="section" style="padding-top: 120px; min-height: 80vh;">
       <div class="container policy-container" style="max-width: 800px; margin: 0 auto;">
         <h1 class="section-title" style="margin-bottom: 2rem;">Return & Refund Policy</h1>
         <div style="color: var(--text-muted); line-height: 1.8;">
